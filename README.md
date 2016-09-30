@@ -6,7 +6,10 @@ Our project is a game named “Saving Humanity”. It is played from a top-down 
 Group 24, members are as following;
 
 MERT SEBAHATTİN KUTLUCA – 21301206
+
 OĞUZHAN KARAKAHYA – 
+
 CAN BAYRAKTAR – 
+
 ERDEM KARAOSMAN - 
  
