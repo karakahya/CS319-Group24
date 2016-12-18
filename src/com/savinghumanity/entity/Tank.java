@@ -1,4 +1,7 @@
 package com.savinghumanity.entity;
+
+import java.awt.image.BufferedImage;
+
 public abstract class Tank extends GameObject {
 
 	private int speed;
@@ -8,9 +11,9 @@ public abstract class Tank extends GameObject {
 	private int speedX;
 	private int speedY;
 
-	public Tank() {
+	public Tank(int posX,int posY) {
+		super(posX,posY);
 		// TODO - implement Tank.Tank
-		throw new UnsupportedOperationException();
 	}
 
 	public void update() {

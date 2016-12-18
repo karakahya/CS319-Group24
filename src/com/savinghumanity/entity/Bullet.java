@@ -1,4 +1,7 @@
 package com.savinghumanity.entity;
+
+import java.awt.image.BufferedImage;
+
 public class Bullet extends GameObject {
 
 	private int speedX;
@@ -6,7 +9,8 @@ public class Bullet extends GameObject {
 	private int destinationX;
 	private int destinationY;
 
-	public Bullet() {
+	public Bullet(int xPos, int yPos) {
+		super(xPos,yPos);
 		// TODO - implement Bullet.Bullet
 		throw new UnsupportedOperationException();
 	}

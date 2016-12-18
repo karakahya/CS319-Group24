@@ -1,4 +1,7 @@
 package com.savinghumanity.entity;
+
+import java.awt.image.BufferedImage;
+
 public class PlayerTank extends Tank {
 
 	private boolean canMove;
@@ -11,6 +14,7 @@ public class PlayerTank extends Tank {
 	 * @param yPos
 	 */
 	public PlayerTank(int xPos, int yPos) {
+		super(xPos,yPos);
 		// TODO - implement PlayerTank.PlayerTank
 		throw new UnsupportedOperationException();
 	}
