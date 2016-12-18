@@ -8,7 +8,6 @@
 // 3 is water
 // 4 is grass
 // 5 statue(1 for each team)
-// upper right 4x4 square is blank, lower left square is concrete and lower right square is grass
 
 5	- 1 = (2,5) - 2 = (2,6) - 3 = (2,7) - 4 = (2,8) - 5 = (2,9)
 
