@@ -4,14 +4,15 @@ import java.awt.image.BufferedImage;
 
 public class Broken extends Bonus {
 
-	public Broken(int posX, int posY) {
-		super(posX, posY);
-		// TODO Auto-generated constructor stub
+	public Broken(int corX, int corY, boolean isalive, int duration, int start){
+			
+			
+			super(corX,corY,isalive,duration,start);
 	}
-
-	public void effect() {
-		// TODO - implement Broken.effect
-		throw new UnsupportedOperationException();
+		
+	public void effect(PlayerTank pt){
+			
+			pt.setcanFire(false);
 	}
 
 	public void update() {
