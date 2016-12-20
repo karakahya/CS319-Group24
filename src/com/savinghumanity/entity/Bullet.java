@@ -3,21 +3,29 @@ package com.savinghumanity.entity;
 import java.awt.image.BufferedImage;
 
 public class Bullet extends GameObject {
-
-	private int speedX;
-	private int speedY;
-	private int destinationX;
-	private int destinationY;
-
-	public Bullet(int xPos, int yPos) {
-		super(xPos,yPos);
-		// TODO - implement Bullet.Bullet
-		throw new UnsupportedOperationException();
+	
+	public int speedX;
+	public int speedY;
+	public int destinationX;
+	public int destinationY;
+	
+	public Bullet(int corX, int corY, boolean isalive, int vX, int vY, int firstX, int firstY ){
+		
+		super(corX, corY, isalive);
+		speedX = vX;
+		speedY = vY;
+		destinationX = firstX;
+		destinationY = firstY;
+		
+		
+		
 	}
-
-	public void update() {
-		// TODO - implement Bullet.update
-		throw new UnsupportedOperationException();
+	
+	public update(){
+		
+		
 	}
+	
+	
 
 }
