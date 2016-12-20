@@ -3,20 +3,31 @@ package com.savinghumanity.entity;
 import java.awt.image.BufferedImage;
 
 public class PlayerTank extends Tank {
+	
+	public boolean canMove;
+	public boolean canFire;
+	public boolean invincible;
+	
+	public PlayerTank(int corX, int corY, boolean isalive, int firstSpeed, int firstRange, int firstDamage, int firstHealth, int firstX, int firstY, boolean movable, boolean firable, boolean invince){
+		super(corX, corY, isalive, firstSpeed, firstRange, firstDamage, firstHealth, firstX, firstY);
+		canMove = movable;
+		canFire = firable;
+		invincible = invince;
+		
+		
+	}
+	
+	
+	public void setcanMove(boolean effect){
+		canMove = effect;
+	}
 
-	private boolean canMove;
-	private boolean canFire;
-	private boolean invincible;
+	public void setcanFire(boolean effect){
+		canFire = effect;
+	}
 
-	/**
-	 * 
-	 * @param xPos
-	 * @param yPos
-	 */
-	public PlayerTank(int xPos, int yPos) {
-		super(xPos,yPos);
-		// TODO - implement PlayerTank.PlayerTank
-		throw new UnsupportedOperationException();
+	public void setinvincible(boolean effect){
+		invincible = effect;
 	}
 
 }
