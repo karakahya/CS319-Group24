@@ -4,14 +4,18 @@ import java.awt.image.BufferedImage;
 
 public class Rooted extends Bonus {
 
-	public Rooted(int posX, int posY) {
-		super(posX, posY);
-		// TODO Auto-generated constructor stub
-	}
-
-	public void effect() {
-		// TODO - implement Rooted.effect
-		throw new UnsupportedOperationException();
+	public Rooted(int corX, int corY, boolean isalive, int duration, int start){
+		
+		
+		super(corX,corY,isalive,duration,start);
+}
+	
+	public void effect(PlayerTank pt){
+		
+		
+		pt.setcanMove(false);
+		
+		
 	}
 
 	@Override
