@@ -1,74 +1,44 @@
 package com.savinghumanity.gui;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class MainMenu extends Scene {
+public class MainMenu extends Scene{
 
-	public MainMenu(GridPane grid,Stage primaryStage) {
-		super(grid,300,275);
+	public MainMenu(GridPane grid, Stage primaryStage) {
+		super(grid, 800,600);
 		grid.setAlignment(Pos.CENTER);
-		grid.setHgap(10);
-		grid.setVgap(10);
-		grid.setPadding(new Insets(25,25,25,25));
+		grid.setVgap(20);
 		
-		Text scenetitle = new Text("Welcome");
-		scenetitle.setId("welcome-text");
-		grid.add(scenetitle, 0, 0,2,1);
+		Text scenetitle = new Text ("Saving Humanity");
+		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		
-		Label userName = new Label("User Name:");
-		grid.add(userName, 0, 1);
-
-		TextField userTextField = new TextField();
-		grid.add(userTextField, 1, 1);
-
-		Label pw = new Label("Password:");
-		grid.add(pw, 0, 2);
-
-		PasswordField pwBox = new PasswordField();
-		grid.add(pwBox, 1, 2);
+		Button button1 = new Button("Play SinglePlayer");
+		Button button2 = new Button("Play MultiPlayer");
+		Button button3 = new Button("Help");
+		Button button4 = new Button("Exit"); 
 		
-		Button btn = new Button("Sign in");
-		HBox hbBtn = new HBox(10);
-		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().add(btn);
-		grid.add(hbBtn, 1, 4);
+		button1.setMaxWidth(Double.MAX_VALUE);
+		button2.setMaxWidth(Double.MAX_VALUE);
+		button3.setMaxWidth(Double.MAX_VALUE);
+		button4.setMaxWidth(Double.MAX_VALUE);
 		
-	
+		button1.setOnAction(e -> primaryStage.setScene(Main.gameScene));
+		button2.setOnAction(e -> primaryStage.setScene(Main.multiplayerScene));
+		button3.setOnAction(e -> primaryStage.setScene(Main.helpScene));
+		button4.setOnAction(e -> System.exit(0));
 		
-		final Text actiontarget = new Text();
-		actiontarget.setId("actiontarget");
-        grid.add(actiontarget, 1, 6);
-        
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-			 
-		    @Override
-		    public void handle(ActionEvent e) {
-		        actiontarget.setText("Sign in button pressed");
-		        GameApplication.switchToGameScene(primaryStage);
-		    }
-		});
-		
-		//grid.setGridLinesVisible(true);
-        this.getStylesheets().add(getClass().getResource("css/mainmenu.css").toExternalForm());
+		grid.add(scenetitle, 0, 0);
+		grid.add(button1, 0, 1);
+		grid.add(button2, 0, 2);
+		grid.add(button3, 0, 3);
+		grid.add(button4, 0, 4);
 	}
-	
-	
-		
 	
 }
