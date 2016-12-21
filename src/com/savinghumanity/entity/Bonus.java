@@ -3,17 +3,17 @@ package com.savinghumanity.entity;
 import java.awt.image.BufferedImage;
 
 public abstract class Bonus extends GameObject {
-	public int durationTime;
-	public long startingTime;
-	
-	public Bonus(int corX, int corY, boolean isalive, int duration, int start) {
-		super(corX, corY, isalive);
+
+	public Bonus(int posX, int posY, boolean isalive,long duration, long start) {
+		super(posX, posY,isalive);
 		durationTime = duration;
 		startingTime = start;
 		
-		
 	}
 
-	public abstract void effect();
+	private long durationTime;
+	private long startingTime;
+
+	public abstract void effect(PlayerTank pt);
 
 }

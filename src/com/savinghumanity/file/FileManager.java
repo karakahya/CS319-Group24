@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
+
 import com.savinghumanity.entity.BrickTile;
 import com.savinghumanity.entity.ConcreteTile;
 import com.savinghumanity.entity.EnemyTank;
 import com.savinghumanity.entity.GrassTile;
 import com.savinghumanity.entity.Map;
+import com.savinghumanity.entity.PlayerTank;
 import com.savinghumanity.entity.Tank;
 import com.savinghumanity.entity.Tile;
 import com.savinghumanity.entity.WaterTile;
@@ -16,6 +19,7 @@ import com.savinghumanity.gui.GameApplication;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -24,7 +28,7 @@ public class FileManager {
 
 	private ArrayList<Double> highScoreList;
 	private Tile[][] mapObjectList;
-	private FileManager theFileManager;
+	private static FileManager theFileManager;
 	private static BufferedImage entitySprite;
 
 	public void readHighScore() {
@@ -43,20 +47,26 @@ public class FileManager {
 
 	/**
 	 * Reads a level file from disk and instantiates the corresponding map
+	 * 
 	 * Any error happens during map file reads are considered as fatal errors
 	 * Henceforth the program will exit upon encountering exceptions in this method
-	 * @param filePath
-	 * @param enemyTanks
+	 * @param filePath File path for map file
+	 * @param multiPlayerNo Count of how many players will be playing, 1 for single game, more for multiplayer game
+	 * @param enemyTanks empty array list for enemy tanks, will be filled in the method
+	 * @param playerTanks empty array list for player tanks, will be filled in the method
 	 */
-	public Map readMapFile(String filePath,ArrayList<Tank> enemyTanks) {
+	public Map readMapFile(String filePath,int multiPlayerNo,ArrayList<EnemyTank> enemyTanks,ArrayList<PlayerTank> playerTanks) {
 		Map gameMap = new Map();
 		FileReader fr;
 		int enemyTankCount = 0;
 		int posX = -1,posY = -1;
+		int tankType = -1;
 		int tankNo = -1;
-		boolean atTankDescription = false; // true if reader comes to the part where enemy tank count and coordinates are specified
+		boolean atEnemyTankDescription = false; // true if reader comes to the part where enemy tank count and coordinates are specified
+		boolean atPlayerTankDescription = false;
+		boolean isSinglePlayer = multiPlayerNo == 1;
 		
-		String numberPattern = "[0-9]";
+		String numberPattern = "[0-9]+";
 		// Create a Pattern object
 	     Pattern r = Pattern.compile(numberPattern);
 
@@ -73,13 +83,13 @@ public class FileManager {
 					
 					//If we are in the comment section yet
 					
-					if(!atTankDescription){
+					if(!atEnemyTankDescription && isSinglePlayer){
 						m = r.matcher(currentLine);
 						//If we find a number it means that now we are in tank description line
 						//First match is the tank count
 						
 						if(m.find()){
-							atTankDescription = true;
+							atEnemyTankDescription = true;
 							enemyTankCount = Integer.parseInt(m.group());
 						}
 						int groupCount = 0;
@@ -87,23 +97,45 @@ public class FileManager {
 						while(m.find()){
 							
 							//Tank number
-							if(groupCount % 3 == 0 )
+							if(groupCount % 4 == 0 )
 								tankNo = Integer.parseInt(m.group());
-							else if(groupCount %3 == 1)
+							else if(groupCount %4 == 1)
 								posX = Integer.parseInt(m.group());
-							else if(groupCount %3 == 2){
-								
+							else if(groupCount %4 == 2)
 								posY = Integer.parseInt(m.group());
-								Tank newTank = new EnemyTank(posX,posY,0);
+							else{
+								tankType = Integer.parseInt(m.group());
+								EnemyTank newTank = new EnemyTank(posX,posY,true,tankType);
 								enemyTanks.add(tankNo-1,newTank);
-								
 							}
 							groupCount++;
 						}
 						
 					}
-					// If we are reading the map tiles
-					else if(atTankDescription && !currentLine.equals("")){
+					//If we are in the player tank specification part
+					else if((isSinglePlayer && atEnemyTankDescription && !atPlayerTankDescription) || (!isSinglePlayer && !atEnemyTankDescription && !atPlayerTankDescription)){
+						m = r.matcher(currentLine);
+						
+						int groupCount = 0;
+						while(m.find()){
+							atPlayerTankDescription = true;
+							if(groupCount % 3 == 0){
+								tankNo = Integer.parseInt(m.group());
+								//Stop at specified player tank count
+								if(tankNo > multiPlayerNo)
+									continue;
+							}
+							else if(groupCount %3 == 1)
+								posX = Integer.parseInt(m.group());
+							else if(groupCount %3 == 2){
+								posY = Integer.parseInt(m.group());
+								PlayerTank newTank = new PlayerTank(posX,posY,true, 1,1,1,1,1,1,true,true,false , false);
+								playerTanks.add(tankNo-1,newTank);
+							}
+							groupCount++;
+						}
+					}
+					else if(atPlayerTankDescription && !currentLine.equals("")){
 						int tileNo = 0;
 						m = r.matcher(currentLine);
 						int columnCount = 0;
@@ -113,13 +145,13 @@ public class FileManager {
 							if(tileNo == 0)
 								newTile = null;
 							else if(tileNo == 1)
-								newTile = new BrickTile(rowCount, columnCount); 
+								newTile = new BrickTile(rowCount, columnCount , true); 
 							else if(tileNo == 2)
-								newTile = new ConcreteTile(rowCount, columnCount); 
+								newTile = new ConcreteTile(rowCount, columnCount , true); 
 							else if(tileNo == 3)
-								newTile = new WaterTile(rowCount, columnCount); 
+								newTile = new WaterTile(rowCount, columnCount , true); 
 							else if(tileNo == 4)
-								newTile = new GrassTile(rowCount,columnCount);
+								newTile = new GrassTile(rowCount,columnCount , true);
 							if(rowCount >= gameMap.getMapHeight() || columnCount >= gameMap.getMapWidth());
 								// TODO Add new Exception here and handle it in GameApllication or somewhere!
 							gameMap.addTile(newTile, rowCount, columnCount);
@@ -140,7 +172,7 @@ public class FileManager {
 		return gameMap;
 	}
 
-	public FileManager getInstance() {
+	public static FileManager getInstance() {
 		if(theFileManager == null)
 			theFileManager = new FileManager();
 		return theFileManager;
@@ -148,6 +180,14 @@ public class FileManager {
 
 	private FileManager() {
 		highScoreList = new ArrayList<Double>();
+		entitySprite = null;
+		try {
+		    entitySprite = ImageIO.read(new File("data/sprite/sprite.png"));
+		}catch(FileNotFoundException e){
+			GameApplication.alertFileNotFound("data/sprite/sprite.png");
+		}catch (IOException e) {
+			GameApplication.alertIOException();
+		}
 		
 	}
 	
@@ -156,11 +196,10 @@ public class FileManager {
 			return null;
 		return mapObjectList;
 	}
-	
-	public static void main(String[] args){
-		FileManager test = new FileManager();
-		ArrayList<Tank> tanks = new ArrayList<Tank>();
-		Map gameMap = test.readMapFile("data/map/level1.txt", tanks);
+	public static BufferedImage getEntitySprite(){
+		return entitySprite;
 	}
+	
+	
 
 }

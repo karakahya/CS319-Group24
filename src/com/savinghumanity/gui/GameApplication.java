@@ -1,7 +1,13 @@
 package com.savinghumanity.gui;
 
+import java.util.ArrayList;
+
+import com.savinghumanity.entity.Map;
+import com.savinghumanity.entity.Tank;
+import com.savinghumanity.file.FileManager;
 import com.savinghumanity.gamelogic.GameEngine;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -17,11 +23,11 @@ import javafx.stage.Stage;
 
 public class GameApplication extends Application {
 
-	private static GameEngine engine;
-	private static Help helpScene;
-	private static MainMenu mainMenuScene;
-	private static MultiplayerMenu multiplayerMenuScene;
-	private static GameScene gameScene;
+	protected static GameEngine engine;
+	protected static Help helpScene;
+	protected static MainMenu mainMenuScene;
+	protected static MultiplayerMenu multiplayerMenuScene;
+	protected static GameScene gameScene;
 
 	/**
 	 * 
@@ -37,26 +43,41 @@ public class GameApplication extends Application {
 	 * @param primaryStage
 	 */
 
-	@Override
+	
 	public void start(Stage primaryStage) throws Exception {
+
 		primaryStage.setTitle("Saving Humanity");
+		primaryStage.setResizable(false);
+		engine = GameEngine.getInstance();
 		
-		
-		 GridPane grid = new GridPane();
+		GridPane grid = new GridPane();
 		//Dummy mainmenu - taken from JavaFX login menu application
-		 mainMenuScene = new MainMenu(grid,primaryStage);
-		
+		mainMenuScene = new MainMenu(grid,primaryStage);
+
 		//Initialize pane that will be used for specific scene!
 		Group group = new Group();
 		//Pass that pane to the constructor so that scene can call super()
-		 gameScene = new GameScene(group,primaryStage);
+		gameScene = new GameScene(group,primaryStage);
+		
+		GridPane helpGrid = new GridPane();
+		helpScene = new Help(helpGrid,primaryStage);
+		
+		GridPane multiplayerGrid = new GridPane();
+		multiplayerMenuScene = new MultiplayerMenu(multiplayerGrid,primaryStage);
+		
+		
+		
+		engine.startGame("data/map/level1.txt",1);
 		
 		primaryStage.setScene(mainMenuScene);
 		primaryStage.show();
-		
-		
+
+
+
+
+
 	}
-	
+
 	public static void switchToGameScene(Stage primaryStage){
 		primaryStage.setScene(gameScene);
 	}
@@ -69,15 +90,15 @@ public class GameApplication extends Application {
 	public static void switchToMultiplayerMenu(Stage primaryStage){
 		primaryStage.setScene(multiplayerMenuScene);
 	}
-	
+
 	public static void alertFileNotFound(String filePath){
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("File Reading Error");
 		alert.setHeaderText("File Reading Error");
-		alert.setContentText("File couldn't found on the path specified:" + filePath + "/nPlease make sure that game is installed correctly on your system! Program is now exiting" );
+		alert.setContentText("File couldn't found on the path specified:" + filePath + "Please make sure that game is installed correctly on your system! Program is now exiting" );
 		alert.showAndWait();
 		Platform.exit();
-	    System.exit(0);
+		System.exit(0);
 	}
 	public static void alertIOException(){
 		Alert alert = new Alert(AlertType.ERROR);
@@ -86,8 +107,8 @@ public class GameApplication extends Application {
 		alert.setContentText("An IOException is occurred. Program is exiting now" );
 		alert.showAndWait();
 		Platform.exit();
-	    System.exit(0);
+		System.exit(0);
 	}
-	
+
 
 }

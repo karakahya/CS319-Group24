@@ -4,27 +4,17 @@ import java.awt.image.BufferedImage;
 
 public class Immortality extends Bonus {
 
-	
-	public Immortality(int corX, int corY, boolean isalive, int duration, int start){
-		
-	
-		super(corX,corY,isalive,duration,start);
-}
-	
-	public void effect(int size, EnemyTank[] army){
-		
-		for(int i=0;i<size;i++){
-			army[i].setDamage(0);
-		}
-		
-		
+	public Immortality(int posX, int posY, boolean isalive , long duration, long start) {
+		super(posX, posY, isalive , duration, start);
+		// TODO Auto-generated constructor stub
 	}
-}
 
-
+	public void effect(PlayerTank pt) {
+		pt.setinvincible(true);
+	}
 
 	public void update() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

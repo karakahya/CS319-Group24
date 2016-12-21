@@ -29,14 +29,14 @@ public class Help extends Scene {
 				+ "For Multi Player: \n"
 				+ "press W-A-S-D to move the tank1, press Left_Ctrl to shoot \n"
 				+ "press G-Y-H-J to move the tank2, press B to shoot \n"
-				+ "press O-K-L-Þ to move the tank3, press Right_Ctrl to shoot \n"
+				+ "press O-K-L-Åž to move the tank3, press Right_Ctrl to shoot \n"
 				+ "press arrow keys to move the tank4, press numpad 0(zero) to shoot \n"
 				+ "press Q for sound on/off \n"
 				+ "press P to pause/continue the game");
 		
 		button.setMaxWidth(Double.MAX_VALUE);
 			
-		button.setOnAction(e -> primaryStage.setScene(Main.mainMenuScene));
+		button.setOnAction(e -> primaryStage.setScene(GameApplication.mainMenuScene));
 			
 		grid.add(scenetitle, 0, 0);
 		grid.add(label, 0, 1);
@@ -44,4 +44,3 @@ public class Help extends Scene {
 		}
 		
 }
-

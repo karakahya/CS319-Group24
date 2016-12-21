@@ -1,21 +1,24 @@
 package com.savinghumanity.entity;
-import java.util.Random;
+
 import java.awt.image.BufferedImage;
+import java.util.Random;
+
+import com.savinghumanity.gamelogic.GameEngine;
 
 public class RandomDestroyer extends Bonus {
 
-	public RandomDestroyer(int corX, int corY, boolean isalive, int duration, int start){
-		
-		super(corX,corY,isalive,duration,start);
-}
-	
-	public void effect(int size, EnemyTank[] army){
-		Random random = new Random();
-		int lucky = random.nextInt(size);
-		
+	public RandomDestroyer(int posX, int posY , boolean isalive,long duration, long start) {
+		super(posX, posY , isalive , duration , start);
 		
 	}
-	@Override
+
+	public void effect(PlayerTank pt) {
+		Random random = new Random();
+		int lucky = random.nextInt(GameEngine.getEnemyTankList().size());
+		GameEngine.destroyTank(lucky);
+	}
+
+	
 	public void update() {
 		// TODO Auto-generated method stub
 		

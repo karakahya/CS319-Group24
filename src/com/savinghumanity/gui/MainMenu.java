@@ -29,9 +29,9 @@ public class MainMenu extends Scene{
 		button3.setMaxWidth(Double.MAX_VALUE);
 		button4.setMaxWidth(Double.MAX_VALUE);
 		
-		button1.setOnAction(e -> primaryStage.setScene(Main.gameScene));
-		button2.setOnAction(e -> primaryStage.setScene(Main.multiplayerScene));
-		button3.setOnAction(e -> primaryStage.setScene(Main.helpScene));
+		button1.setOnAction(e -> primaryStage.setScene(GameApplication.gameScene));
+		button2.setOnAction(e -> primaryStage.setScene(GameApplication.multiplayerMenuScene));
+		button3.setOnAction(e -> primaryStage.setScene(GameApplication.helpScene));
 		button4.setOnAction(e -> System.exit(0));
 		
 		grid.add(scenetitle, 0, 0);

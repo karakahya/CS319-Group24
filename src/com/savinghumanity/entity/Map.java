@@ -22,6 +22,9 @@ public class Map {
 	public void addTile(Tile tile, int i, int j){
 		tileMap[i][j] = tile;
 	}
+	public Tile getTile(int i, int j){
+		return tileMap[i][j];
+	}
 	public int getMapWidth() {
 		return mapWidth;
 	}

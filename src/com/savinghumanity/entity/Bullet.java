@@ -2,30 +2,62 @@ package com.savinghumanity.entity;
 
 import java.awt.image.BufferedImage;
 
+import com.savinghumanity.file.FileManager;
+
+import javafx.embed.swing.SwingFXUtils;
+
 public class Bullet extends GameObject {
-	
-	public int speedX;
-	public int speedY;
-	public int destinationX;
-	public int destinationY;
-	
-	public Bullet(int corX, int corY, boolean isalive, int vX, int vY, int firstX, int firstY ){
+
+	private int speedX;
+	private int speedY;
+	private int destinationX;
+	private int destinationY;
+	private MoveDirection direction;
+
+	public Bullet(int xPos, int yPos ,  boolean isalive, MoveDirection direction , int range) {
+		super(xPos,yPos , isalive);
+		BufferedImage temp = null;
 		
-		super(corX, corY, isalive);
-		speedX = vX;
-		speedY = vY;
-		destinationX = firstX;
-		destinationY = firstY;
-		
-		
+		switch(direction){
+		case UP:
+			speedX = 0;
+			speedY = -1;
+			destinationX = xPos;
+			destinationY = yPos - range;
+			temp = FileManager.getEntitySprite().getSubimage(20 * 16, 6 * 16, 8, 8); 
+			
+			break;
+		case RIGHT:
+			speedX = 1;
+			speedY = 0;
+			destinationX = xPos + range;
+			destinationY = yPos;
+			temp = FileManager.getEntitySprite().getSubimage(20 * 16 + 24, 6 * 16, 8, 8); 
+			break;
+		case DOWN:
+			speedX = 0;
+			speedY = 1;
+			destinationX = 0;
+			destinationY = yPos + range;
+			temp = FileManager.getEntitySprite().getSubimage(20 * 16 + 16, 6 * 16, 8, 8); 
+			break;
+		case LEFT:
+			speedX = -1;
+			speedY = 0;
+			destinationX = xPos - range;
+			destinationY = yPos;
+			temp = FileManager.getEntitySprite().getSubimage(20 * 16 + 8, 6 * 16, 8, 8); 
+			break;
+			
+		}
+		temp = GameObject.scale(temp, BufferedImage.TYPE_3BYTE_BGR, 16, 16, 2, 2);
+		this.image = (SwingFXUtils.toFXImage(temp, null));
 		
 	}
-	
-	public update(){
-		
-		
+
+	public void update() {
+		// TODO - implement Bullet.update
+		throw new UnsupportedOperationException();
 	}
-	
-	
 
 }
