@@ -13,7 +13,7 @@ public class InputManager {
 		return this.buttonsPressed;
 	}
 	 
-	GameScene.getGameScene().setOnKeyPressed(
+	GameApplication.getGameScene().setOnKeyPressed(
 	        new EventHandler<KeyEvent>()
 	        {
 			public void handle(KeyEvent e)
@@ -24,7 +24,7 @@ public class InputManager {
 	                }
 	});
 	        
-	GameScene.getGameScene().setOnKeyReleased(
+	GameApplication.getGameScene().setOnKeyReleased(
 	 	new EventHandler<KeyEvent>()
 	        {
 	                public void handle(KeyEvent e)
