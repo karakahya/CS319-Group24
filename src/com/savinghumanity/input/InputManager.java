@@ -13,20 +13,18 @@ public class InputManager {
 		return this.buttonsPressed;
 	}
 	 
-	theScene.setOnKeyPressed(
+	GameScene.getScene().setOnKeyPressed(
 	        new EventHandler<KeyEvent>()
 	        {
 			public void handle(KeyEvent e)
 	                {
 	                	String code = e.getCode().toString();
-	 
-	                    // only add once... prevent duplicates
 	                    	if ( !input.contains(code) )
 	                        	input.add( code );
 	                }
 	});
 	        
-	theScene.setOnKeyReleased(
+	GameScene.getScene().setOnKeyReleased(
 	 	new EventHandler<KeyEvent>()
 	        {
 	                public void handle(KeyEvent e)
