@@ -9,16 +9,23 @@ import javafx.scene.image.Image;
 
 public abstract class GameObject {
 
-	private int posX;
-	private int posY;
+	protected float posX;
+	protected float posY;
+	protected float speedX;
+	protected float speedY;
+	
 	protected Image image;
-	private boolean isAlive;
+	protected boolean isAlive;
 
-	public GameObject(int posX,int posY,boolean isAlive){
+	public GameObject(float posX,float posY,boolean isAlive){
 		this.posX = posX;
 		this.posY = posY;
+		speedX = 0.0f;
+		speedY = 0.0f;
 		this.isAlive = true; // Alive at the beginning
 	}
+
+
 
 	public abstract void update();
 
@@ -28,8 +35,8 @@ public abstract class GameObject {
 	 * @param obj other game object that is checked whether this object is collided
 	 */
 	public boolean collisionCheck(GameObject obj) {
-		Rectangle rectOne = new Rectangle(getPosX(), getPosY(), 32, 32);
-		Rectangle rectTwo = new Rectangle(obj.getPosX() , obj.getPosY() , 32 , 32);
+		Rectangle rectOne = new Rectangle((int)(posX + speedX) , (int)(posY + speedY), 32, 32);
+		Rectangle rectTwo = new Rectangle((int)(obj.getPosX() + obj.getSpeedX()) , (int)(obj.getPosY() + obj.getSpeedY()) , 32 , 32);
 		if(rectOne.intersects(rectTwo))
 			return true;
 		return false;
@@ -60,19 +67,19 @@ public abstract class GameObject {
 		return image;
 	}
 
-	public int getPosX() {
+	public float getPosX() {
 		return posX;
 	}
 
-	public void setPosX(int posX) {
+	public void setPosX(float posX) {
 		this.posX = posX;
 	}
 
-	public int getPosY() {
+	public float getPosY() {
 		return posY;
 	}
 
-	public void setPosY(int posY) {
+	public void setPosY(float posY) {
 		this.posY = posY;
 	}
 
@@ -82,6 +89,21 @@ public abstract class GameObject {
 
 	public void setAlive(boolean isAlive) {
 		this.isAlive = isAlive;
+	}
+	public float getSpeedX() {
+		return speedX;
+	}
+
+	public void setSpeedX(float speedX) {
+		this.speedX = speedX;
+	}
+
+	public float getSpeedY() {
+		return speedY;
+	}
+
+	public void setSpeedY(float speedY) {
+		this.speedY = speedY;
 	}
 
 

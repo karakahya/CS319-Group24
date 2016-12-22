@@ -12,8 +12,6 @@ public abstract class Tank extends GameObject implements Animation {
 	protected int fireRange;
 	protected int damage;
 	protected int health;
-	protected int speedX;
-	protected int speedY;
 	protected Image[] lTank;
 	protected Image[] uTank;
 	protected Image[] rTank;
@@ -23,7 +21,7 @@ public abstract class Tank extends GameObject implements Animation {
 	protected short animationFrame;
 	protected Bullet currentBullet;
 	
-	public Tank(int posX,int posY,boolean isalive) {
+	public Tank(float posX,float posY,boolean isalive) {
 		super(posX,posY,isalive);
 		
 		lTank = new Image[2];
@@ -61,13 +59,13 @@ public abstract class Tank extends GameObject implements Animation {
 	}
 
 	public void update() {
-		// TODO - implement Tank.update
-		throw new UnsupportedOperationException();
+		posX += speedX;
+		posY += speedY;
 	}
 
 	public void fire() {
 		
-		Bullet bullet = new Bullet(getPosX() , getPosY(), true, direction ,fireRange);
+		Bullet bullet = new Bullet(getPosX() , getPosY(), true, direction ,fireRange , damage);
 		GameEngine.getAllObjects().add(bullet);
 		GameEngine.getBulletList().add(bullet);
 		currentBullet = bullet;
@@ -104,23 +102,7 @@ public abstract class Tank extends GameObject implements Animation {
 	public void setHealth(int health) {
 		this.health = health;
 	}
-
-	public int getSpeedX() {
-		return speedX;
-	}
-
-	public void setSpeedX(int speedX) {
-		this.speedX = speedX;
-	}
-
-	public int getSpeedY() {
-		return speedY;
-	}
-
-	public void setSpeedY(int speedY) {
-		this.speedY = speedY;
-	}
-
+	
 	public Image[] getlTank() {
 		return lTank;
 	}

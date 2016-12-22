@@ -6,9 +6,11 @@ import com.savinghumanity.entity.Bonus;
 import com.savinghumanity.entity.Bullet;
 import com.savinghumanity.entity.EnemyTank;
 import com.savinghumanity.entity.GameObject;
+import com.savinghumanity.entity.GrassTile;
 import com.savinghumanity.entity.Map;
 import com.savinghumanity.entity.PlayerTank;
 import com.savinghumanity.entity.Tank;
+import com.savinghumanity.entity.Tile;
 import com.savinghumanity.file.FileManager;
 
 public class GameEngine {
@@ -90,6 +92,38 @@ public class GameEngine {
 	public void buttonPressed(int keyPressed) {
 		// TODO - implement GameEngine.buttonPressed
 		throw new UnsupportedOperationException();
+	}
+	
+	public void handleCollision(){
+		for(int i = 0 ; i < allObjects.size() ; i++){
+			for(int j = 0 ; j < allObjects.size() ; j++){
+				if(i == j) continue;
+				
+				GameObject obj1 = allObjects.get(i);
+				GameObject obj2 = allObjects.get(j);
+				if(allObjects.get(i).collisionCheck(allObjects.get(j))){
+					if(obj1 instanceof Tank && obj2 instanceof Tank){
+						
+					}
+					else if(obj1 instanceof Tank && obj2 instanceof Bullet){
+					
+					}
+					else if(obj1 instanceof Tank && obj2 instanceof Tile){
+						if(obj2 instanceof GrassTile) continue;
+						obj1.setSpeedX(0.0f);
+						obj1.setSpeedY(0.0f);
+						
+					}
+					else if(obj1 instanceof Tank && obj2 instanceof Bonus){
+						
+					}
+					else if(obj1 instanceof Bullet && obj2 instanceof Tile){
+						
+					}
+	
+				}
+			}
+		}
 	}
 
 	public static void destroyTank(int i) {

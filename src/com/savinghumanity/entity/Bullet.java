@@ -8,41 +8,40 @@ import javafx.embed.swing.SwingFXUtils;
 
 public class Bullet extends GameObject {
 
-	private int speedX;
-	private int speedY;
-	private int destinationX;
-	private int destinationY;
+	private float destinationX;
+	private float destinationY;
 	private MoveDirection direction;
-
-	public Bullet(int xPos, int yPos ,  boolean isalive, MoveDirection direction , int range) {
+	private int damage;
+	public Bullet(float xPos, float yPos ,  boolean isalive, MoveDirection direction , int range, int damage) {
 		super(xPos,yPos , isalive);
+		this.damage = damage;
 		BufferedImage temp = null;
 		
 		switch(direction){
 		case UP:
-			speedX = 0;
-			speedY = -1;
+			speedX = 0.0f;
+			speedY = -0.1f;
 			destinationX = xPos;
 			destinationY = yPos - range;
 			temp = FileManager.getEntitySprite().getSubimage(20 * 16, 6 * 16, 8, 8); 
 			
 			break;
 		case RIGHT:
-			speedX = 1;
-			speedY = 0;
+			speedX = 0.1f;
+			speedY = 0.0f;
 			destinationX = xPos + range;
 			destinationY = yPos;
 			temp = FileManager.getEntitySprite().getSubimage(20 * 16 + 24, 6 * 16, 8, 8); 
 			break;
 		case DOWN:
 			speedX = 0;
-			speedY = 1;
+			speedY = 0.1f;
 			destinationX = 0;
 			destinationY = yPos + range;
 			temp = FileManager.getEntitySprite().getSubimage(20 * 16 + 16, 6 * 16, 8, 8); 
 			break;
 		case LEFT:
-			speedX = -1;
+			speedX = -0.1f;
 			speedY = 0;
 			destinationX = xPos - range;
 			destinationY = yPos;

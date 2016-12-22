@@ -21,7 +21,7 @@ public class EnemyTank extends Tank {
 	 * @param yPos
 	 * @param type
 	 */
-	public EnemyTank(int xPos, int yPos,boolean isalive, int type) {
+	public EnemyTank(float xPos, float yPos,boolean isalive, int type) {
 		super(xPos,yPos,isalive);
 		BufferedImage temp;
 		this.type = type;
@@ -30,8 +30,8 @@ public class EnemyTank extends Tank {
 			this.fireRange = 10;
 			this.damage = 10;
 			this.health = 10;
-			this.speedX = 10;
-			this.speedY = 10;
+			this.speedX = 0.0f;
+			this.speedY = 0.0f;
 
 
 		}
@@ -40,8 +40,8 @@ public class EnemyTank extends Tank {
 			this.fireRange = 20;
 			this.damage = 20;
 			this.health = 20;
-			this.speedX = 20;
-			this.speedY = 20;
+			this.speedX = 0.0f;
+			this.speedY = 0.0f;
 
 
 		}
@@ -51,8 +51,8 @@ public class EnemyTank extends Tank {
 			this.fireRange = 20;
 			this.damage = 20;
 			this.health = 20;
-			this.speedX = 20;
-			this.speedY = 20;
+			this.speedX = 0.0f;
+			this.speedY = 0.0f;
 
 
 		}

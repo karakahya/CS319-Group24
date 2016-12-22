@@ -18,14 +18,16 @@ public class PlayerTank extends Tank {
 	 * @param xPos
 	 * @param yPos
 	 */
-	public PlayerTank(int corX, int corY,boolean isalive, int firstSpeed, int firstRange, int firstDamage, int firstHealth, int firstX, int firstY, boolean movable, boolean firable, boolean invince , boolean isConfused){
+	public PlayerTank(float corX, float corY,boolean isalive, int firstSpeed, int firstRange, int firstDamage, int firstHealth, boolean movable, boolean firable, boolean invince , boolean isConfused){
 		super(corX, corY,isalive);
 		firstSpeed = speed;
 		firstRange = fireRange;
 		firstDamage = damage;
 		firstHealth = health;
-		firstX = speedX;
-		firstY = speedY;
+		//Initial Speeds
+		speedX = 0.0f;
+		speedY = -1.0f;
+		
 		canMove = movable;
 		canFire = firable;
 		invincible = invince;
@@ -77,6 +79,7 @@ public class PlayerTank extends Tank {
 			super.fire();
 		return;
 	}
+	
 	public void neutralize(){
 		//TODO -- implement neutralize() method
 	}

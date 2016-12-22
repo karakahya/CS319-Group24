@@ -59,7 +59,7 @@ public class FileManager {
 		Map gameMap = new Map();
 		FileReader fr;
 		int enemyTankCount = 0;
-		int posX = -1,posY = -1;
+		float posX = 0,posY = 0;
 		int tankType = -1;
 		int tankNo = -1;
 		boolean atEnemyTankDescription = false; // true if reader comes to the part where enemy tank count and coordinates are specified
@@ -100,12 +100,12 @@ public class FileManager {
 							if(groupCount % 4 == 0 )
 								tankNo = Integer.parseInt(m.group());
 							else if(groupCount %4 == 1)
-								posX = Integer.parseInt(m.group());
+								posX = Float.parseFloat(m.group());
 							else if(groupCount %4 == 2)
-								posY = Integer.parseInt(m.group());
+								posY = Float.parseFloat(m.group());
 							else{
 								tankType = Integer.parseInt(m.group());
-								EnemyTank newTank = new EnemyTank(posX,posY,true,tankType);
+								EnemyTank newTank = new EnemyTank(posY * 32,posX * 32,true,tankType);
 								enemyTanks.add(tankNo-1,newTank);
 							}
 							groupCount++;
@@ -129,7 +129,7 @@ public class FileManager {
 								posX = Integer.parseInt(m.group());
 							else if(groupCount %3 == 2){
 								posY = Integer.parseInt(m.group());
-								PlayerTank newTank = new PlayerTank(posX,posY,true, 1,1,1,1,1,1,true,true,false , false);
+								PlayerTank newTank = new PlayerTank(posY * 32,posX * 32,true, 1,1,1,1,true,true,false , false);
 								playerTanks.add(tankNo-1,newTank);
 							}
 							groupCount++;
@@ -145,13 +145,13 @@ public class FileManager {
 							if(tileNo == 0)
 								newTile = null;
 							else if(tileNo == 1)
-								newTile = new BrickTile(rowCount, columnCount , true); 
+								newTile = new BrickTile(columnCount * 32, rowCount * 32 , true); 
 							else if(tileNo == 2)
-								newTile = new ConcreteTile(rowCount, columnCount , true); 
+								newTile = new ConcreteTile(columnCount * 32, rowCount * 32 , true); 
 							else if(tileNo == 3)
-								newTile = new WaterTile(rowCount, columnCount , true); 
+								newTile = new WaterTile(columnCount * 32, rowCount * 32 , true); 
 							else if(tileNo == 4)
-								newTile = new GrassTile(rowCount,columnCount , true);
+								newTile = new GrassTile(columnCount * 32,rowCount * 32 , true);
 							if(rowCount >= gameMap.getMapHeight() || columnCount >= gameMap.getMapWidth());
 								// TODO Add new Exception here and handle it in GameApllication or somewhere!
 							gameMap.addTile(newTile, rowCount, columnCount);
@@ -167,7 +167,7 @@ public class FileManager {
 		}catch(FileNotFoundException e){
 			GameApplication.alertFileNotFound(filePath);
 		}catch(IOException e){
-			GameApplication.alertIOException();
+			GameApplication.alertIOException(filePath);
 		}
 		return gameMap;
 	}
@@ -186,7 +186,7 @@ public class FileManager {
 		}catch(FileNotFoundException e){
 			GameApplication.alertFileNotFound("data/sprite/sprite.png");
 		}catch (IOException e) {
-			GameApplication.alertIOException();
+			GameApplication.alertIOException("data/sprite/sprite.png");
 		}
 		
 	}

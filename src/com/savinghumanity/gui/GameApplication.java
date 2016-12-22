@@ -78,6 +78,38 @@ public class GameApplication extends Application {
 
 	}
 
+	public static Help getHelpScene() {
+		return helpScene;
+	}
+
+	public static void setHelpScene(Help helpScene) {
+		GameApplication.helpScene = helpScene;
+	}
+
+	public static MainMenu getMainMenuScene() {
+		return mainMenuScene;
+	}
+
+	public static void setMainMenuScene(MainMenu mainMenuScene) {
+		GameApplication.mainMenuScene = mainMenuScene;
+	}
+
+	public static MultiplayerMenu getMultiplayerMenuScene() {
+		return multiplayerMenuScene;
+	}
+
+	public static void setMultiplayerMenuScene(MultiplayerMenu multiplayerMenuScene) {
+		GameApplication.multiplayerMenuScene = multiplayerMenuScene;
+	}
+
+	public static GameScene getGameScene() {
+		return gameScene;
+	}
+
+	public static void setGameScene(GameScene gameScene) {
+		GameApplication.gameScene = gameScene;
+	}
+
 	public static void switchToGameScene(Stage primaryStage){
 		primaryStage.setScene(gameScene);
 	}
@@ -100,11 +132,11 @@ public class GameApplication extends Application {
 		Platform.exit();
 		System.exit(0);
 	}
-	public static void alertIOException(){
+	public static void alertIOException(String filePath){
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("IO Exception");
 		alert.setHeaderText("Input/Output Exception");
-		alert.setContentText("An IOException is occurred. Program is exiting now" );
+		alert.setContentText("An IOException is occurred in the file:" + filePath + "Program is exiting now" );
 		alert.showAndWait();
 		Platform.exit();
 		System.exit(0);

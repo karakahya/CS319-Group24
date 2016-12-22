@@ -37,6 +37,7 @@ public class GameScene extends Scene {
 		super(groupPane,800,640,Color.BLACK);
 		
 		final int animationAlternateTime = 500; // in milliseconds, time intervals for alternating images
+		final int updateTime = 10; // 10 ms
 		final Label timeLabel = new Label("0");
 		timeLabel.setLayoutX(640.0);
 		timeLabel.setContentDisplay(ContentDisplay.RIGHT);
@@ -57,6 +58,7 @@ public class GameScene extends Scene {
 			long FPS;
 			long oldNanoTime = 0;
 			double animationTimer = 0;
+			double updateTimer = 0;
 			public void handle(long currentNanoTime)
 			{
 				
@@ -78,15 +80,27 @@ public class GameScene extends Scene {
 				drawGameObjects(gc); // Draw every game object
 				  // total elapsed milliseconds
 				animationTimer += System.nanoTime() - oldNanoTime;
+				updateTimer += System.nanoTime() - oldNanoTime;
 				if( animationTimer / 1000000.0 > animationAlternateTime){ // If elapsed time is passes animation time, then alternate animations
 					animationTimer = 0.0;
 					alternateAnimations();
+				}
+				if(updateTimer / 1000000.0 > updateTime){
+					GameEngine.getInstance().handleCollision();
+					updateGameObjects();
+					updateTimer = 0.0f;
 				}
 				oldNanoTime = System.nanoTime(); // update old nano time
 				
 				timeLabel.setText("Time: " + min + "." + sec + " min.\n FPS:" + (FPS) ); // Display time and FPS
 				
 				
+			
+			}
+			private void updateGameObjects() {
+				for(int i = 0 ; i < GameEngine.getAllObjects().size() ; i++){
+					GameEngine.getAllObjects().get(i).update();
+				}
 				
 			}
 
@@ -101,7 +115,7 @@ public class GameScene extends Scene {
 		for(int i = 0; i < GameEngine.getAllObjects().size() ; i++){
 			GameObject curObj = GameEngine.getAllObjects().get(i);
 			if(curObj.isAlive())
-				g.drawImage(GameEngine.getAllObjects().get(i).getImage(), 32 * curObj.getPosY() , 32 * curObj.getPosX());
+				g.drawImage(GameEngine.getAllObjects().get(i).getImage(), (int)(curObj.getPosX()) , (int)(curObj.getPosY()));
 		}
 	}
 	/**
