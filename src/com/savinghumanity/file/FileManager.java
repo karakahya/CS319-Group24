@@ -3,6 +3,7 @@ package com.savinghumanity.file;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.File;
 
 import javax.imageio.ImageIO;
 
