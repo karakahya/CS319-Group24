@@ -10,21 +10,29 @@ import com.savinghumanity.entity.EnemyTank;
 import com.savinghumanity.entity.GameObject;
 import com.savinghumanity.entity.Tile;
 import com.savinghumanity.entity.WaterTile;
+import com.savinghumanity.file.FileManager;
 import com.savinghumanity.gamelogic.GameEngine;
+import java.io.File;
+import java.net.URL;
 
 import javafx.animation.AnimationTimer;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
@@ -42,12 +50,30 @@ public class GameScene extends Scene {
 		timeLabel.setLayoutX(640.0);
 		timeLabel.setContentDisplay(ContentDisplay.RIGHT);
 		timeLabel.setTextFill(Color.RED);
-
+		
+		//Inserting song
+                String musicFile = "sound.mp3";     // For example
+                Media sound = new Media(FileManager.getSoundFile().toURI().toString());
+                MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                mediaPlayer.play();
+                mediaPlayer.setCycleCount(-1);
+                
+                final Button soundButton = new Button("M");
+                soundButton.autosize();
+                soundButton.setLayoutX(760.0);
+                soundButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override public void handle(ActionEvent e) {
+                        if(mediaPlayer.isMute())
+                        mediaPlayer.setMute(false);
+                        else
+                        mediaPlayer.setMute(true);
+                    }
+                });
+                
 		Canvas canvas = new Canvas(800,640);
 		groupPane.getChildren().add(canvas);
 		groupPane.getChildren().add(timeLabel);
-
-
+                groupPane.getChildren().add(soundButton);
 
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
 		final long startNanoTime = System.nanoTime();
@@ -128,7 +154,7 @@ public class GameScene extends Scene {
 		}
 		
 	}
-	// Mert senin kodlarý buraya aldým. Bir kýsmýný yukarýda kullandým zaten. ihtiyaç anýnda el frenini çekip buradan alabiliriz tekrar
+	// Mert senin kodlarÃ½ buraya aldÃ½m. Bir kÃ½smÃ½nÃ½ yukarÃ½da kullandÃ½m zaten. ihtiyaÃ§ anÃ½nda el frenini Ã§ekip buradan alabiliriz tekrar
 	/*
 	 @Override
 	    public void start(Stage theStage) 
