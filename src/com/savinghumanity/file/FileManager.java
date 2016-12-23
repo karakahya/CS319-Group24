@@ -199,7 +199,11 @@ public class FileManager {
 	public static BufferedImage getEntitySprite(){
 		return entitySprite;
 	}
-	
+	public static File getSoundFile(){
+                String musicFile = "data/sound.mp3";
+                File soundFile = new File(musicFile);
+                return soundFile;
+        }
 	
 
 }
