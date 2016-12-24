@@ -14,6 +14,7 @@ public class EnemyTank extends Tank {
 	// 1 -- level 1
 	// 2 -- level 2
 	private int type;
+        private float distanceLeft;
 
 	/**
 	 * 
@@ -25,9 +26,10 @@ public class EnemyTank extends Tank {
 		super(xPos,yPos,isalive);
 		BufferedImage temp;
 		this.type = type;
+                distanceLeft = 0;
 		if(this.type==0){
-			this.speed = 10;
-			this.fireRange = 10;
+			speed = 1;
+			this.fireRange = 300.0f;
 			this.damage = 10;
 			this.health = 10;
 			this.speedX = 0.0f;
@@ -36,8 +38,8 @@ public class EnemyTank extends Tank {
 
 		}
 		else if(this.type==1){
-			this.speed = 20;
-			this.fireRange = 20;
+			this.speed = 1;
+			this.fireRange = 300.0f;
 			this.damage = 20;
 			this.health = 20;
 			this.speedX = 0.0f;
@@ -47,8 +49,8 @@ public class EnemyTank extends Tank {
 		}
 
 		else if(this.type==2){
-			this.speed = 20;
-			this.fireRange = 20;
+			this.speed = 1;
+			this.fireRange = 300.0f;
 			this.damage = 20;
 			this.health = 20;
 			this.speedX = 0.0f;
@@ -96,9 +98,65 @@ public class EnemyTank extends Tank {
 
 	}
 
-	public void findAPath(){
-		//TODO - implement findAPath
+    public float getDistanceLeft() {
+        return distanceLeft;
+    }
 
+    public void setDistanceLeft(float distanceLeft) {
+        this.distanceLeft = distanceLeft;
+    }
+
+	public void findAPath(PlayerTank pt){
+            fire();
+            if(distanceLeft > 0) return;
+            float xDifference = pt.getPosX() - posX;
+            float yDifference = pt.getPosY() - posY;
+            distanceLeft = 32;
+            double random = Math.random();
+            if(random < 0.7){
+                if(Math.abs(xDifference) < Math.abs(yDifference)){
+                    if(yDifference > 0)
+                        speedY = -speed;
+                    else
+                        speedY = speed;
+                }
+                else{
+                    if(xDifference > 0)
+                        speedX = -speed;
+                    else
+                        speedX = speed;
+                }
+            }
+            else{
+                random = Math.random();
+                if(random < 0.25)
+                    speedY = -speed;
+                else if(0.25 <= random && random < 0.5)
+                    speedY = speed;
+                else if(0.5 <= random && random < 0.75 )
+                    speedX = -speed;
+                else
+                    speedX = speed;
+            }
+            if(speedX > 0){
+                direction = MoveDirection.RIGHT;
+                setImage( rTank[0]);
+            }
+            else if(speedX < 0){
+                direction = MoveDirection.LEFT;
+                setImage( lTank[0]);
+            }
+            else if(speedY < 0){
+                direction = MoveDirection.UP;
+                setImage( uTank[0]);
+            }
+            else if(speedY > 0){
+                direction = MoveDirection.DOWN;
+                setImage( dTank[0]);
+            }
+            
+                
+        
 	}
 
 	public void checkDestination(PlayerTank pt){

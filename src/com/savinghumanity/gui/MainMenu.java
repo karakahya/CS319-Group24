@@ -1,5 +1,6 @@
 package com.savinghumanity.gui;
 
+import static com.savinghumanity.gui.GameApplication.engine;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -29,7 +30,10 @@ public class MainMenu extends Scene{
 		button3.setMaxWidth(Double.MAX_VALUE);
 		button4.setMaxWidth(Double.MAX_VALUE);
 		
-		button1.setOnAction(e -> primaryStage.setScene(GameApplication.gameScene));
+		button1.setOnAction(e -> {primaryStage.setScene(GameApplication.gameScene);
+                        engine.startGame("data/map/Level1.txt",1);
+                        GameApplication.aTimer.start();
+        });
 		button2.setOnAction(e -> primaryStage.setScene(GameApplication.multiplayerMenuScene));
 		button3.setOnAction(e -> primaryStage.setScene(GameApplication.helpScene));
 		button4.setOnAction(e -> System.exit(0));

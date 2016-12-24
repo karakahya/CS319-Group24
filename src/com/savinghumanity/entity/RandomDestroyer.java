@@ -7,7 +7,7 @@ import com.savinghumanity.gamelogic.GameEngine;
 
 public class RandomDestroyer extends Bonus {
 
-	public RandomDestroyer(int posX, int posY , boolean isalive,long duration, long start) {
+	public RandomDestroyer(float posX, float posY , boolean isalive,long duration, long start) {
 		super(posX, posY , isalive , duration , start);
 		
 	}

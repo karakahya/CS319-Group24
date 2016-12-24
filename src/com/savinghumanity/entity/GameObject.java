@@ -27,7 +27,10 @@ public abstract class GameObject {
 
 
 
-	public abstract void update();
+	public void update(){
+            posX += speedX;
+            posY += speedY;
+        }
 
 
 	/**
@@ -35,8 +38,23 @@ public abstract class GameObject {
 	 * @param obj other game object that is checked whether this object is collided
 	 */
 	public boolean collisionCheck(GameObject obj) {
-		Rectangle rectOne = new Rectangle((int)(posX + speedX) , (int)(posY + speedY), 32, 32);
-		Rectangle rectTwo = new Rectangle((int)(obj.getPosX() + obj.getSpeedX()) , (int)(obj.getPosY() + obj.getSpeedY()) , 32 , 32);
+                Rectangle rectOne = null;
+                Rectangle rectTwo = null;
+                if(obj instanceof Bullet ){
+                    rectOne = new Rectangle((int)(posX + speedX) , (int)(posY + speedY), 14, 14);
+                }
+                else{
+                    rectOne = new Rectangle((int)(posX + speedX) , (int)(posY + speedY), 30, 30);
+                }
+                if(this instanceof Bullet){
+                    rectTwo = new Rectangle((int)(obj.getPosX() + obj.getSpeedX()) , (int)(obj.getPosY() + obj.getSpeedY()), 14, 14);
+                }
+                else{
+                    rectTwo = new Rectangle((int)(obj.getPosX() + obj.getSpeedX()) , (int)(obj.getPosY() + obj.getSpeedY()) , 30 , 30);
+
+                }
+		
+		
 		if(rectOne.intersects(rectTwo))
 			return true;
 		return false;
@@ -66,6 +84,11 @@ public abstract class GameObject {
 	public Image getImage(){
 		return image;
 	}
+
+        public void setImage(Image image) {
+            this.image = image;
+        }
+        
 
 	public float getPosX() {
 		return posX;

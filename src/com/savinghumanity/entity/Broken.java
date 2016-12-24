@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class Broken extends Bonus {
 
-	public Broken(int posX, int posY, boolean isalive , long duration, long start) {
+	public Broken(float posX, float posY, boolean isalive , long duration, long start) {
 		super(posX, posY, isalive , duration , start);
 		// TODO Auto-generated constructor stub
 	}

@@ -12,8 +12,8 @@ public class WaterTile extends Tile implements Animation {
 	private Image[] animation;
 	short animationFrame;
 	
-	public WaterTile(int posX, int posY, boolean isAlive) {
-		super(posX, posY , isAlive);
+	public WaterTile(int posX, int posY, boolean isAlive,int arrX, int arrY) {
+		super(posX, posY , isAlive , arrX,arrY);
 		animation = new Image[2];
 		animationFrame = 0;
 		BufferedImage temp;

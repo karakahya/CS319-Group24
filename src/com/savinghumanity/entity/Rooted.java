@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class Rooted extends Bonus {
 
-	public Rooted(int posX, int posY , boolean isalive,long duration, long start) {
+	public Rooted(float posX, float posY , boolean isalive,long duration, long start) {
 		super(posX, posY , isalive , duration , start);
 		
 	}

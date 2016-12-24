@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class Immortality extends Bonus {
 
-	public Immortality(int posX, int posY, boolean isalive , long duration, long start) {
+	public Immortality(float posX, float posY, boolean isalive , long duration, long start) {
 		super(posX, posY, isalive , duration, start);
 		// TODO Auto-generated constructor stub
 	}

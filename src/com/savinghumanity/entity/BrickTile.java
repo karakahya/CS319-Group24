@@ -8,8 +8,8 @@ import com.savinghumanity.file.FileManager;
 
 public class BrickTile extends Tile {
 
-	public BrickTile(int posX, int posY,boolean isAlive) {
-		super(posX, posY, isAlive);
+	public BrickTile(int posX, int posY,boolean isAlive,int arrX, int arrY) {
+		super(posX, posY, isAlive,arrX,arrY);
 		BufferedImage temp;
 		temp = FileManager.getEntitySprite().getSubimage(16*16, 0 * 16, 16, 16); // Coordinate for brick tile - (0,16) in sprite
 		//Scale image to 32x32

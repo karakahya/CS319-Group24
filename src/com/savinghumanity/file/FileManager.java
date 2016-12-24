@@ -130,7 +130,7 @@ public class FileManager {
 								posX = Integer.parseInt(m.group());
 							else if(groupCount %3 == 2){
 								posY = Integer.parseInt(m.group());
-								PlayerTank newTank = new PlayerTank(posY * 32,posX * 32,true, 1,1,1,1,true,true,false , false);
+								PlayerTank newTank = new PlayerTank(posY * 32,posX * 32,true, 1.0f,300.0f,10,100,true,true,false , false);
 								playerTanks.add(tankNo-1,newTank);
 							}
 							groupCount++;
@@ -146,13 +146,13 @@ public class FileManager {
 							if(tileNo == 0)
 								newTile = null;
 							else if(tileNo == 1)
-								newTile = new BrickTile(columnCount * 32, rowCount * 32 , true); 
+								newTile = new BrickTile(columnCount * 32, rowCount * 32 , true,rowCount, columnCount); 
 							else if(tileNo == 2)
-								newTile = new ConcreteTile(columnCount * 32, rowCount * 32 , true); 
+								newTile = new ConcreteTile(columnCount * 32, rowCount * 32 , true,rowCount, columnCount); 
 							else if(tileNo == 3)
-								newTile = new WaterTile(columnCount * 32, rowCount * 32 , true); 
+								newTile = new WaterTile(columnCount * 32, rowCount * 32 , true,rowCount, columnCount); 
 							else if(tileNo == 4)
-								newTile = new GrassTile(columnCount * 32,rowCount * 32 , true);
+								newTile = new GrassTile(columnCount * 32,rowCount * 32 , true,rowCount, columnCount);
 							if(rowCount >= gameMap.getMapHeight() || columnCount >= gameMap.getMapWidth());
 								// TODO Add new Exception here and handle it in GameApllication or somewhere!
 							gameMap.addTile(newTile, rowCount, columnCount);

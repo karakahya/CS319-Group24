@@ -28,6 +28,7 @@ public class GameApplication extends Application {
 	protected static MainMenu mainMenuScene;
 	protected static MultiplayerMenu multiplayerMenuScene;
 	protected static GameScene gameScene;
+        protected static AnimationTimer aTimer;
 
 	/**
 	 * 
@@ -48,7 +49,7 @@ public class GameApplication extends Application {
 
 		primaryStage.setTitle("Saving Humanity");
 		primaryStage.setResizable(false);
-		engine = GameEngine.getInstance();
+		
 		
 		GridPane grid = new GridPane();
 		//Dummy mainmenu - taken from JavaFX login menu application
@@ -66,8 +67,8 @@ public class GameApplication extends Application {
 		multiplayerMenuScene = new MultiplayerMenu(multiplayerGrid,primaryStage);
 		
 		
+		engine = GameEngine.getInstance();
 		
-		engine.startGame("data/map/level1.txt",1);
 		
 		primaryStage.setScene(mainMenuScene);
 		primaryStage.show();
@@ -93,7 +94,9 @@ public class GameApplication extends Application {
 	public static void setMainMenuScene(MainMenu mainMenuScene) {
 		GameApplication.mainMenuScene = mainMenuScene;
 	}
-
+        public static AnimationTimer getATimer(){
+            return aTimer;
+        }
 	public static MultiplayerMenu getMultiplayerMenuScene() {
 		return multiplayerMenuScene;
 	}

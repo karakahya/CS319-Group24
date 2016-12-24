@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class Confuse extends Bonus {
 
-	public Confuse(int posX, int posY,  boolean isalive,long duration, long start) {
+	public Confuse(float posX, float posY,  boolean isalive,long duration, long start) {
 		super(posX, posY, isalive , duration , start);
 		
 	}

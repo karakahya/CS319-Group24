@@ -8,8 +8,8 @@ import javafx.scene.image.Image;
 
 public abstract class Tank extends GameObject implements Animation {
 
-	protected int speed;
-	protected int fireRange;
+	protected float speed;
+	protected float fireRange;
 	protected int damage;
 	protected int health;
 	protected Image[] lTank;
@@ -35,6 +35,7 @@ public abstract class Tank extends GameObject implements Animation {
 		
 	}
 	public void alternateAnimation() {
+            if(speedX == 0 && speedY == 0) return;
 		if(direction == MoveDirection.UP && animationFrame == 0)
 			this.image = uTank[1];
 		else if(direction == MoveDirection.UP && animationFrame == 1)
@@ -58,32 +59,30 @@ public abstract class Tank extends GameObject implements Animation {
 			animationFrame = 0;
 	}
 
-	public void update() {
-		posX += speedX;
-		posY += speedY;
-	}
 
 	public void fire() {
-		
-		Bullet bullet = new Bullet(getPosX() , getPosY(), true, direction ,fireRange , damage);
+		if(currentBullet != null) return;
+                if(this instanceof PlayerTank && !((PlayerTank)this).isCanFire() ) return;
+                
+		Bullet bullet = new Bullet(getPosX() , getPosY(), true, direction ,fireRange , damage,this);
 		GameEngine.getAllObjects().add(bullet);
 		GameEngine.getBulletList().add(bullet);
 		currentBullet = bullet;
 	}
 	
-	public int getSpeed() {
+	public float getSpeed() {
 		return speed;
 	}
 
-	public void setSpeed(int speed) {
+	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
 
-	public int getFireRange() {
+	public float getFireRange() {
 		return fireRange;
 	}
 
-	public void setFireRange(int fireRange) {
+	public void setFireRange(float fireRange) {
 		this.fireRange = fireRange;
 	}
 
@@ -134,6 +133,19 @@ public abstract class Tank extends GameObject implements Animation {
 	public void setdTank(Image[] dTank) {
 		this.dTank = dTank;
 	}
+        
+        public void setMoveDirection(MoveDirection direction){
+            this.direction = direction;
+        }
+        public MoveDirection getMoveDirection(){
+            return this.direction;
+        }
+        public Bullet getBullet(){
+            return currentBullet;
+        }
+        public void setBullet(Bullet value){
+            currentBullet = value;
+        }
 	
 
 }

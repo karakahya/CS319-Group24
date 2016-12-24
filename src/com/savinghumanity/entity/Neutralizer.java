@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class Neutralizer extends Bonus {
 
-	public Neutralizer(int posX, int posY , boolean isalive,long duration, long start) {
+	public Neutralizer(float posX, float posY , boolean isalive,long duration, long start) {
 		super(posX, posY , isalive , duration , start);
 		// TODO Auto-generated constructor stub
 	}

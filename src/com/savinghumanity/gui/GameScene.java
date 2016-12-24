@@ -6,12 +6,14 @@ import javafx.scene.paint.LinearGradient;
 import java.util.ArrayList;
 
 import com.savinghumanity.entity.Animation;
+import com.savinghumanity.entity.Bullet;
 import com.savinghumanity.entity.EnemyTank;
 import com.savinghumanity.entity.GameObject;
 import com.savinghumanity.entity.Tile;
 import com.savinghumanity.entity.WaterTile;
 import com.savinghumanity.file.FileManager;
 import com.savinghumanity.gamelogic.GameEngine;
+import com.savinghumanity.input.InputManager;
 import java.io.File;
 import java.net.URL;
 
@@ -44,12 +46,16 @@ public class GameScene extends Scene {
 	public GameScene(Group groupPane, Stage primaryStage) {
 		super(groupPane,800,640,Color.BLACK);
 		
-		final int animationAlternateTime = 500; // in milliseconds, time intervals for alternating images
+		final int animationAlternateTime = 400; // in milliseconds, time intervals for alternating images
 		final int updateTime = 10; // 10 ms
 		final Label timeLabel = new Label("0");
 		timeLabel.setLayoutX(640.0);
 		timeLabel.setContentDisplay(ContentDisplay.RIGHT);
 		timeLabel.setTextFill(Color.RED);
+                
+                Label bonusLabel = new Label("");
+                bonusLabel.setLayoutX(640.0);
+                bonusLabel.setLayoutY(50.0);
 		
 		//Inserting song
                 String musicFile = "sound.mp3";     // For example
@@ -74,25 +80,36 @@ public class GameScene extends Scene {
 		groupPane.getChildren().add(canvas);
 		groupPane.getChildren().add(timeLabel);
                 groupPane.getChildren().add(soundButton);
+                groupPane.getChildren().add(bonusLabel);
 
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
-		final long startNanoTime = System.nanoTime();
-		new AnimationTimer()
+		
+		GameApplication.aTimer = new AnimationTimer()
 		{
+                        long startNanoTime = System.nanoTime();
 			String secBefore = "";
 			long iterations = 0;
 			long FPS;
-			long oldNanoTime = 0;
+			long oldNanoTime = System.nanoTime();
 			double animationTimer = 0;
 			double updateTimer = 0;
+                        
+                        @Override
 			public void handle(long currentNanoTime)
-			{
-				
+			{       
+                                //System.out.println(GameEngine.getInstance().getAllObjects().size());
+				gc.clearRect(0, 0, 800, 640);
+                                
 				double t = (currentNanoTime - startNanoTime) / 1000000000.0;
 				
-				
-				
-				String min = "" + (int) t/60;
+			
+				drawGameObjects(gc); // Draw every game object
+				  // total elapsed milliseconds
+				animationTimer += System.nanoTime() - oldNanoTime;
+				updateTimer += System.nanoTime() - oldNanoTime;
+                               
+                                
+                                String min = "" + (int) t/60;
 				String sec = "" + (int) t % 60;
 				if(!sec.equals(secBefore)){ // If one second is passed, then look for total iterations in that time interval
 					FPS = iterations;
@@ -102,11 +119,7 @@ public class GameScene extends Scene {
 					iterations++;
 				}
 				secBefore = sec;
-				
-				drawGameObjects(gc); // Draw every game object
-				  // total elapsed milliseconds
-				animationTimer += System.nanoTime() - oldNanoTime;
-				updateTimer += System.nanoTime() - oldNanoTime;
+                                
 				if( animationTimer / 1000000.0 > animationAlternateTime){ // If elapsed time is passes animation time, then alternate animations
 					animationTimer = 0.0;
 					alternateAnimations();
@@ -116,22 +129,50 @@ public class GameScene extends Scene {
 					updateGameObjects();
 					updateTimer = 0.0f;
 				}
+                                
 				oldNanoTime = System.nanoTime(); // update old nano time
 				
 				timeLabel.setText("Time: " + min + "." + sec + " min.\n FPS:" + (FPS) ); // Display time and FPS
-				
+                                
+                                if(!GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().isEmpty())
+                                    bonusLabel.setText(GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().get(0).getClass().getSimpleName());
+                                else
+                                    bonusLabel.setText("");
+                                
 				
 			
 			}
 			private void updateGameObjects() {
+                                switch(GameEngine.getInstance().getGametype()){
+                                    case Single:
+                                        GameEngine.getInstance().singleModeVictoryCheck(primaryStage);
+                                        break;
+                                    case MultiplayerDM:
+                                        GameEngine.getInstance().multiDeathmatchVictoryCheck(primaryStage);
+                                        break;
+                                    case MultiplayerTDM:
+                                        GameEngine.getInstance().multiTeamDeathmatchVictoryCheck(primaryStage);
+                                        break;
+                                }
+                                
+                                GameEngine.getInstance().bulletDistanceChecker();
+                                GameEngine.getInstance().checkBonusDuration();
 				for(int i = 0 ; i < GameEngine.getAllObjects().size() ; i++){
+                                        
 					GameEngine.getAllObjects().get(i).update();
+                                        if(GameEngine.getAllObjects().get(i) instanceof Bullet)
+                                            ((Bullet)(GameEngine.getAllObjects().get(i))).updateBullet();
+                                        if(GameEngine.getAllObjects().get(i) instanceof EnemyTank){
+                                            ((EnemyTank)(GameEngine.getAllObjects().get(i))).findAPath(GameEngine.getInstance().getPlayerTankList().get(0));
+                                        }
 				}
 				
 			}
+                      
+                       
 
 
-		}.start();
+		};
 	}
 	/**
 	 * Draws all objects to their respective positions if they are alive

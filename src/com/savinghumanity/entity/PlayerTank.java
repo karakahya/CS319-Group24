@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import javafx.embed.swing.SwingFXUtils;
 
 import com.savinghumanity.file.FileManager;
+import java.util.ArrayList;
 
 public class PlayerTank extends Tank {
 
@@ -12,22 +13,23 @@ public class PlayerTank extends Tank {
 	private boolean canFire;
 	private boolean invincible;
 	private boolean isConfused;
+        private ArrayList<Bonus> tankBonuses;
 
 	/**
 	 * 
 	 * @param xPos
 	 * @param yPos
 	 */
-	public PlayerTank(float corX, float corY,boolean isalive, int firstSpeed, int firstRange, int firstDamage, int firstHealth, boolean movable, boolean firable, boolean invince , boolean isConfused){
+	public PlayerTank(float corX, float corY,boolean isalive, float firstSpeed, float firstRange, int firstDamage, int firstHealth, boolean movable, boolean firable, boolean invince , boolean isConfused){
 		super(corX, corY,isalive);
-		firstSpeed = speed;
-		firstRange = fireRange;
-		firstDamage = damage;
-		firstHealth = health;
+		speed = firstSpeed;
+                fireRange = firstRange;
+                damage = firstDamage;
+                health = firstHealth;
 		//Initial Speeds
 		speedX = 0.0f;
-		speedY = -1.0f;
-		
+		speedY = 0.0f;
+		tankBonuses = new ArrayList<Bonus>();
 		canMove = movable;
 		canFire = firable;
 		invincible = invince;
@@ -73,19 +75,55 @@ public class PlayerTank extends Tank {
 
 
 	}
+
+    public ArrayList<Bonus> getTankBonuses() {
+        return tankBonuses;
+    }
+
+    public void setTankBonuses(ArrayList<Bonus> tankBonuses) {
+        this.tankBonuses = tankBonuses;
+    }
 	@Override
 	public void fire(){
 		if(canFire)
 			super.fire();
 		return;
 	}
-	
+
+    public boolean isCanFire() {
+        return canFire;
+    }
+	public void addBonus(Bonus bonus){
+            tankBonuses.add(bonus);
+        }
 	public void neutralize(){
-		//TODO -- implement neutralize() method
+		canFire = true;
+                canMove = true;
+                damage = 10;
+                fireRange = 300.0f;
+                invincible = false;
+                isConfused = false;
+                
 	}
 	public void setcanMove(boolean effect){
 		canMove = effect;
 	}
+
+    public boolean canMove() {
+        return canMove;
+    }
+
+    public boolean canFire() {
+        return canFire;
+    }
+
+    public boolean isInvincible() {
+        return invincible;
+    }
+
+    public boolean isConfused() {
+        return isConfused;
+    }
 
 	public void setcanFire(boolean effect){
 		canFire = effect;
@@ -96,9 +134,7 @@ public class PlayerTank extends Tank {
 	}
 
 
-	public boolean isConfused() {
-		return isConfused;
-	}
+	
 
 
 	public void setConfused(boolean isConfused) {
