@@ -1,0 +1,51 @@
+// Ignore lines starting with double slash
+// First non-comment line specifies number of tanks, following numbers specifies each tank with their coordinates
+// Game maps are of size 36 x 36 (each block is 16x16 pixels)
+// Number after enemy tank count specifies the game map.
+// 0 is blank(no tile)
+// 1 is brick
+// 2 is concrete
+// 3 is water
+// 4 is grass
+5	- 1 = (1,9,1) - 2 = (1,10,1) - 3 = (8,1,1) - 4 = (6,17,1) - 5 = (9,5,1)
+	  1 = (18,18)
+
+2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	
+
+2	0	0	0	0	0	1	1	1	0	0	1	1	1	0	0	2	0	0	2
+
+2	0	0	0	0	0	1	0	1	0	0	1	0	1	0	0	2	0	0	2
+
+2	0	0	0	0	0	1	1	1	0	0	1	0	1	0	0	2	0	0	2
+
+2	0	1	1	0	0	0	0	1	0	0	1	0	1	0	0	0	0	0	2
+
+2	0	0	1	0	0	0	0	1	0	0	1	0	1	0	0	0	0	0	2	
+
+2	0	0	0	0	0	1	1	1	0	0	1	1	1	0	0	0	0	0	2
+
+2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	2
+
+2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	1	0	2
+
+2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2
+
+2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2
+
+2	0	0	3	3	3	3	3	3	0	0	3	3	3	3	3	3	0	0	2
+
+2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2
+
+2	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	1	1	1	2
+
+2	4	0	1	0	0	2	0	0	0	1	1	0	0	0	1	2	2	1	2
+
+2	4	0	1	0	1	2	1	0	0	1	1	0	0	0	1	2	2	1	2
+
+2	4	4	1	0	1	2	1	0	0	0	0	0	0	0	1	1	1	1	2
+
+2	4	4	1	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	2
+
+2	4	4	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	2 
+
+2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2
