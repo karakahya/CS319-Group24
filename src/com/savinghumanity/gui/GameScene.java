@@ -9,9 +9,12 @@ import com.savinghumanity.entity.Animation;
 import com.savinghumanity.entity.Bullet;
 import com.savinghumanity.entity.EnemyTank;
 import com.savinghumanity.entity.GameObject;
+import com.savinghumanity.entity.Increase;
+import com.savinghumanity.entity.IncreaseBonusType;
 import com.savinghumanity.entity.Tile;
 import com.savinghumanity.entity.WaterTile;
 import com.savinghumanity.file.FileManager;
+import com.savinghumanity.fx.Effect;
 import com.savinghumanity.gamelogic.GameEngine;
 import com.savinghumanity.input.InputManager;
 import java.io.File;
@@ -45,71 +48,76 @@ import javafx.stage.Stage;
 public class GameScene extends Scene {
 	public GameScene(Group groupPane, Stage primaryStage) {
 		super(groupPane,800,640,Color.BLACK);
-		
+
 		final int animationAlternateTime = 400; // in milliseconds, time intervals for alternating images
-		final int updateTime = 10; // 10 ms
+		final int updateTime = 8; // in ms
 		final Label timeLabel = new Label("0");
 		timeLabel.setLayoutX(640.0);
 		timeLabel.setContentDisplay(ContentDisplay.RIGHT);
 		timeLabel.setTextFill(Color.RED);
-                
-                Label bonusLabel = new Label("");
-                bonusLabel.setLayoutX(640.0);
-                bonusLabel.setLayoutY(50.0);
+
+		Label bonusLabel = new Label("");
+		bonusLabel.setLayoutX(640.0);
+		bonusLabel.setLayoutY(50.0);
 		
+		Label healthLabel = new Label("");
+		healthLabel.setLayoutX(640.0);
+		healthLabel.setLayoutY(100.0);
+
 		//Inserting song
-                String musicFile = "sound.mp3";     // For example
-                Media sound = new Media(FileManager.getSoundFile().toURI().toString());
-                MediaPlayer mediaPlayer = new MediaPlayer(sound);
-                mediaPlayer.play();
-                mediaPlayer.setCycleCount(-1);
-                
-                final Button soundButton = new Button("M");
-                soundButton.autosize();
-                soundButton.setLayoutX(760.0);
-                soundButton.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override public void handle(ActionEvent e) {
-                        if(mediaPlayer.isMute())
-                        mediaPlayer.setMute(false);
-                        else
-                        mediaPlayer.setMute(true);
-                    }
-                });
-                
+		String musicFile = "sound.mp3";     // For example
+		Media sound = new Media(FileManager.getSoundFile().toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.play();
+		mediaPlayer.setCycleCount(-1);
+
+		final Button soundButton = new Button("M");
+		soundButton.autosize();
+		soundButton.setLayoutX(760.0);
+		soundButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override public void handle(ActionEvent e) {
+				if(mediaPlayer.isMute())
+					mediaPlayer.setMute(false);
+				else
+					mediaPlayer.setMute(true);
+			}
+		});
+
 		Canvas canvas = new Canvas(800,640);
 		groupPane.getChildren().add(canvas);
 		groupPane.getChildren().add(timeLabel);
-                groupPane.getChildren().add(soundButton);
-                groupPane.getChildren().add(bonusLabel);
+		groupPane.getChildren().add(soundButton);
+		groupPane.getChildren().add(bonusLabel);
+		groupPane.getChildren().add(healthLabel);
 
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
-		
+
 		GameApplication.aTimer = new AnimationTimer()
 		{
-                        long startNanoTime = System.nanoTime();
+			long startNanoTime = System.nanoTime();
 			String secBefore = "";
 			long iterations = 0;
 			long FPS;
 			long oldNanoTime = System.nanoTime();
 			double animationTimer = 0;
 			double updateTimer = 0;
-                        
-                        @Override
+
+			@Override
 			public void handle(long currentNanoTime)
 			{       
-                                //System.out.println(GameEngine.getInstance().getAllObjects().size());
+				//System.out.println(GameEngine.getInstance().getAllObjects().size());
 				gc.clearRect(0, 0, 800, 640);
-                                
+
 				double t = (currentNanoTime - startNanoTime) / 1000000000.0;
-				
-			
+				bonusLabel.setText("");
+
 				drawGameObjects(gc); // Draw every game object
-				  // total elapsed milliseconds
+				// total elapsed milliseconds
 				animationTimer += System.nanoTime() - oldNanoTime;
 				updateTimer += System.nanoTime() - oldNanoTime;
-                               
-                                
-                                String min = "" + (int) t/60;
+
+
+				String min = "" + (int) t/60;
 				String sec = "" + (int) t % 60;
 				if(!sec.equals(secBefore)){ // If one second is passed, then look for total iterations in that time interval
 					FPS = iterations;
@@ -119,57 +127,75 @@ public class GameScene extends Scene {
 					iterations++;
 				}
 				secBefore = sec;
-                                
+
 				if( animationTimer / 1000000.0 > animationAlternateTime){ // If elapsed time is passes animation time, then alternate animations
 					animationTimer = 0.0;
 					alternateAnimations();
 				}
+				
+
+				oldNanoTime = System.nanoTime(); // update old nano time
+
+				timeLabel.setText("Time: " + min + "." + sec + " min.\n FPS:" + (FPS) ); // Display time and FPS
+				healthLabel.setText("Health:" + GameEngine.getInstance().getPlayerTankList().get(0).getHealth());
+				String bonusList = "";
+				for(int i = 0 ; i < GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().size() ; i++ ){
+					if(!(GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().get(i) instanceof Increase))
+						bonusList += GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().get(i).getClass().getSimpleName() + "\n";
+					else{
+						if(((Increase)(GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().get(i))).getType() == IncreaseBonusType.INCREASE_DAMAGE)
+							bonusList += "Increase Damage\n";
+						else if(((Increase)(GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().get(i))).getType() == IncreaseBonusType.INCREASE_FIRE_RANGE)
+							bonusList += "Increase Fire Range\n";
+						else if(((Increase)(GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().get(i))).getType() == IncreaseBonusType.INCREASE_HEALTH)
+							bonusList += "Increase Health\n";
+						else if(((Increase)(GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().get(i))).getType() == IncreaseBonusType.INCREASE_SPEED)
+							bonusList += "Increase Speed\n";
+					}
+				}
+				if(!GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().isEmpty())
+					bonusLabel.setText(bonusList);
+
 				if(updateTimer / 1000000.0 > updateTime){
 					GameEngine.getInstance().handleCollision();
 					updateGameObjects();
 					updateTimer = 0.0f;
 				}
-                                
-				oldNanoTime = System.nanoTime(); // update old nano time
-				
-				timeLabel.setText("Time: " + min + "." + sec + " min.\n FPS:" + (FPS) ); // Display time and FPS
-                                
-                                if(!GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().isEmpty())
-                                    bonusLabel.setText(GameEngine.getInstance().getPlayerTankList().get(0).getTankBonuses().get(0).getClass().getSimpleName());
-                                else
-                                    bonusLabel.setText("");
-                                
-				
-			
+
 			}
 			private void updateGameObjects() {
-                                switch(GameEngine.getInstance().getGametype()){
-                                    case Single:
-                                        GameEngine.getInstance().singleModeVictoryCheck(primaryStage);
-                                        break;
-                                    case MultiplayerDM:
-                                        GameEngine.getInstance().multiDeathmatchVictoryCheck(primaryStage);
-                                        break;
-                                    case MultiplayerTDM:
-                                        GameEngine.getInstance().multiTeamDeathmatchVictoryCheck(primaryStage);
-                                        break;
-                                }
-                                
-                                GameEngine.getInstance().bulletDistanceChecker();
-                                GameEngine.getInstance().checkBonusDuration();
-				for(int i = 0 ; i < GameEngine.getAllObjects().size() ; i++){
-                                        
-					GameEngine.getAllObjects().get(i).update();
-                                        if(GameEngine.getAllObjects().get(i) instanceof Bullet)
-                                            ((Bullet)(GameEngine.getAllObjects().get(i))).updateBullet();
-                                        if(GameEngine.getAllObjects().get(i) instanceof EnemyTank){
-                                            ((EnemyTank)(GameEngine.getAllObjects().get(i))).findAPath(GameEngine.getInstance().getPlayerTankList().get(0));
-                                        }
+				switch(GameEngine.getInstance().getGametype()){
+				case Single:
+					GameEngine.getInstance().singleModeVictoryCheck(primaryStage);
+					break;
+				case MultiplayerDM:
+					GameEngine.getInstance().multiDeathmatchVictoryCheck(primaryStage);
+					break;
+				case MultiplayerTDM:
+					GameEngine.getInstance().multiTeamDeathmatchVictoryCheck(primaryStage);
+					break;
 				}
-				
+
+				GameEngine.getInstance().bulletDistanceChecker();
+				GameEngine.getInstance().checkBonusDuration();
+				GameEngine.getInstance().sweepDeadEffects();
+				for(int i = 0 ; i < GameEngine.getInstance().getAllObjects().size() ; i++){
+
+					GameEngine.getInstance().getAllObjects().get(i).update();
+					if(GameEngine.getInstance().getAllObjects().get(i) instanceof Bullet)
+						((Bullet)(GameEngine.getInstance().getAllObjects().get(i))).updateBullet();
+					if(GameEngine.getInstance().getAllObjects().get(i) instanceof EnemyTank){
+						try{
+							((EnemyTank)(GameEngine.getInstance().getAllObjects().get(i))).findAPath(GameEngine.getInstance().getPlayerTankList().get(0));
+						}catch(IndexOutOfBoundsException e){
+							
+						}
+					}
+				}
+
 			}
-                      
-                       
+
+
 
 
 		};
@@ -179,187 +205,22 @@ public class GameScene extends Scene {
 	 * @param g GraphicsContext
 	 */
 	private void drawGameObjects(GraphicsContext g){
-		for(int i = 0; i < GameEngine.getAllObjects().size() ; i++){
-			GameObject curObj = GameEngine.getAllObjects().get(i);
+		for(int i = 0; i < GameEngine.getInstance().getAllObjects().size() ; i++){
+			GameObject curObj = GameEngine.getInstance().getAllObjects().get(i);
 			if(curObj.isAlive())
-				g.drawImage(GameEngine.getAllObjects().get(i).getImage(), (int)(curObj.getPosX()) , (int)(curObj.getPosY()));
+				g.drawImage(GameEngine.getInstance().getAllObjects().get(i).getImage(), (int)(curObj.getPosX()) , (int)(curObj.getPosY()));
 		}
 	}
 	/**
 	 * Look inside all game objects, then find that are of type Animation, then alternate their images
 	 */
 	public void alternateAnimations(){
-		for(int i = 0; i < GameEngine.getAllObjects().size() ; i++){
-			if(GameEngine.getAllObjects().get(i) instanceof Animation)
-				((Animation)(GameEngine.getAllObjects().get(i))).alternateAnimation();
+		for(int i = 0; i < GameEngine.getInstance().getAllObjects().size() ; i++){
+			if(GameEngine.getInstance().getAllObjects().get(i) instanceof Animation)
+				((Animation)(GameEngine.getInstance().getAllObjects().get(i))).alternateAnimation();
 		}
-		
-	}
-	// Mert senin kodlarý buraya aldým. Bir kýsmýný yukarýda kullandým zaten. ihtiyaç anýnda el frenini çekip buradan alabiliriz tekrar
-	/*
-	 @Override
-	    public void start(Stage theStage) 
-	    {
-	        theStage.setTitle("Saving Humanity!");
-	        theStage.setResizable(false);
-	        theStage.getIcons().add(new Image("/up2.png"));
-	        
-	        Group root = new Group();
-	        Scene theScene = new Scene(root);
-	        theStage.setScene(theScene);
-	        
-	        Label timeLabel = new Label("0");
-	        Canvas canvas = new Canvas(320,240);
-	        root.getChildren().add(canvas);
-	        root.getChildren().add(timeLabel);
-	        
-	        ArrayList<String> input = new ArrayList<String>();
-	 
-	        theScene.setOnKeyPressed(
-	            new EventHandler<KeyEvent>()
-	            {
-	                public void handle(KeyEvent e)
-	                {
-	                    String code = e.getCode().toString();
-	 
-	                    // only add once... prevent duplicates
-	                    if ( !input.contains(code) )
-	                        input.add( code );
-	                }
-	            });
-	        
-	        theScene.setOnKeyReleased(
-	            new EventHandler<KeyEvent>()
-	            {
-	                public void handle(KeyEvent e)
-	                {
-	                    String code = e.getCode().toString();
-	                    input.remove( code );
-	                }
-	            });
-	        
-	        GraphicsContext gc = canvas.getGraphicsContext2D();
-	        
-	        Image rTank = new Image("/right.png");
-	        Image lTank = new Image("/left.png");
-	        Image uTank = new Image("/up2.png");
-	        Image dTank = new Image("/down.png");
-	        Image back = new Image("/back.png");
-	        Image rmen = new Image("/rmen.png");
-	        Image grass = new Image("/grass.png");
-	        Image bullet = new Image("/bullet.png");
-	        
-	        
-	        final long startNanoTime = System.nanoTime();
-	        
-	        
-	        new AnimationTimer()
-	        {
-	            Image last = rTank;
-	            double x = 0;
-	            double y = 0;
-	            double bx = 0;
-	            double by = 0;
-	            double bsx = 0;
-	            double bsy = 0;
-	            @Override
-	            public void handle(long currentNanoTime)
-	            {
-	                double t = (currentNanoTime - startNanoTime) / 1000000000.0;
-	                timeLabel.setLayoutX(290.0);
-	                timeLabel.setContentDisplay(ContentDisplay.RIGHT);
-	                timeLabel.setTextFill(Color.RED);
-	                String min = "" + (int) t/60;
-	                String sec = "" + (int) t % 60;
-	                timeLabel.setText(min + "." + sec);
-	                
-	                if(input.contains("RIGHT") && x < 272){
-	                    x = x + 0.1;
-	                    bx = bx + 0.1;
-	                    last = rTank;
-	                }
-	                else if(input.contains("LEFT")){
-	                    x = x - 0.1;
-	                    bx = bx - 0.1;
-	                    last = lTank;
-	                }
-	                else if(input.contains("UP")){
-	                    y = y - 0.1;
-	                    by = by - 0.1;
-	                    last = uTank;
-	                }
-	                else if(input.contains("DOWN")){
-	                    y = y + 0.1;
-	                    by = by + 0.1;
-	                    last = dTank;
-	                }
-	                else {}
-	                
-	                if(input.contains("SPACE")){ 
-	                    if(last == uTank){
-	                        bsx = 0;
-	                        bsy = -0.3;
-	                    }
-	                }
-	                if(input.contains("SPACE")){ 
-	                    if(last == dTank){
-	                        bsx = 0;
-	                        bsy = + 0.3;
-	                    }
-	                }
-	                if(input.contains("SPACE")){ 
-	                    if(last == rTank){
-	                        bsx = + 0.3;
-	                        bsy = 0;
-	                    }
-	                }
-	                if(input.contains("SPACE")){ 
-	                    if(last == lTank){
-	                        bsx = - 0.3;
-	                        bsy = 0;
-	                    }
-	                }
-	                if(input.contains("R")){
-	                    bsx = 0;
-	                    bsy = 0;
-	                    bx = x;
-	                    by = y;
-	                    
-	                }
-	                bx = bx + bsx;
-	                by = by + bsy;
-	                
-	                gc.drawImage(back, 0 , 0);
-	                gc.drawImage(rmen, 288,0);
-	                
-	                if(input.contains("RIGHT"))
-	                    gc.drawImage(rTank, x, y);
-	                else if(input.contains("LEFT"))
-	                    gc.drawImage(lTank, x, y);
-	                else if(input.contains("UP"))
-	                    gc.drawImage(uTank, x, y);
-	                else if(input.contains("DOWN"))
-	                    gc.drawImage(dTank, x, y);
-	                else
-	                    gc.drawImage(last, x, y);
-	                
-	                if(bsx != 0 || bsy != 0)
-	                    gc.drawImage(bullet, bx, by);
-	                
-	                gc.drawImage(grass, 128, 96);
-	                gc.drawImage(grass, 144, 96);
-	                gc.drawImage(grass, 160, 96);
-	                gc.drawImage(grass, 128, 112);
-	                gc.drawImage(grass, 144, 112);
-	                gc.drawImage(grass, 160, 112);
-	            }
-	        }.start();
 
-	        theStage.show();
-	        
-	    
-        }
-	 * 
-	 * */
-	 
+	}
+	
+
 }

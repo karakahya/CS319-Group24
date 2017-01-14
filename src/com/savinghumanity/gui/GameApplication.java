@@ -17,6 +17,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -28,7 +30,7 @@ public class GameApplication extends Application {
 	protected static MainMenu mainMenuScene;
 	protected static MultiplayerMenu multiplayerMenuScene;
 	protected static GameScene gameScene;
-        protected static AnimationTimer aTimer;
+    protected static AnimationTimer aTimer;
 
 	/**
 	 * 
@@ -136,6 +138,7 @@ public class GameApplication extends Application {
 		System.exit(0);
 	}
 	public static void alertIOException(String filePath){
+		GameApplication.getATimer().stop();
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("IO Exception");
 		alert.setHeaderText("Input/Output Exception");
@@ -143,6 +146,32 @@ public class GameApplication extends Application {
 		alert.showAndWait();
 		Platform.exit();
 		System.exit(0);
+	}
+	public static void alertLevelFinished(int level){
+		GameApplication.getATimer().stop();
+		Alert alert = new Alert(AlertType.INFORMATION , "Level " + level + " has completed.",ButtonType.OK);
+		alert.setTitle("Level Finished");
+		alert.setContentText("You have finished current level!" );
+		alert.setOnCloseRequest(new EventHandler<DialogEvent>(){
+			@Override
+			public void handle(DialogEvent e){
+				GameApplication.getATimer().start();
+			}
+		});
+		alert.show();
+		
+		
+		//alert.showAndWait();
+	}
+	public static void alertPlayerDie(){
+		GameApplication.getATimer().stop();
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("You died");
+		alert.setContentText("You have failed the humanity!" );
+		alert.show();
+		
+		
+
 	}
 
 

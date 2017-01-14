@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import com.savinghumanity.entity.BrickTile;
 import com.savinghumanity.entity.ConcreteTile;
 import com.savinghumanity.entity.EnemyTank;
+import com.savinghumanity.entity.GameObject;
 import com.savinghumanity.entity.GrassTile;
 import com.savinghumanity.entity.Map;
 import com.savinghumanity.entity.PlayerTank;
@@ -17,6 +18,9 @@ import com.savinghumanity.entity.Tank;
 import com.savinghumanity.entity.Tile;
 import com.savinghumanity.entity.WaterTile;
 import com.savinghumanity.gui.GameApplication;
+
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -190,6 +194,54 @@ public class FileManager {
 			GameApplication.alertIOException("data/sprite/sprite.png");
 		}
 		
+	}
+	// Assuming files are named like name1.extension, name2.extension etc...
+	/**
+	 * Returns an image array from a specified folder
+	 * Assuming files are named like name1.extension, name2.extension etc.
+	 * @param path path of the effect images , need parent folder without slash("/")
+	 * @param size Number of images inside
+	 * @param extension Image extensions
+	 * @param name Name of the effect(i.e name of ordered effect files)
+	 * @return An Image array consists of all effect images
+	 */
+	public Image[] getEffectArray(String path, int size, String extension, String name){
+		Image[] result = new Image[size];
+		for(int i = 0; i < size ; i++){
+			File curFile = new File(path + "/" + name + "" + (i+1) + "." + extension);
+			try {
+				BufferedImage temp = ImageIO.read(curFile);
+				Image curImage = (SwingFXUtils.toFXImage(temp, null));
+				result[i] = curImage;
+				
+			} catch (FileNotFoundException e) {
+				GameApplication.alertFileNotFound(path);
+			}catch(IOException e){
+				GameApplication.alertIOException(path);
+			}
+		}
+		return result;
+	}
+	public Image[] getEffectArray(String path,int startX, int startY,
+			int rowCount, int columnCount, int xSize, int ySize){
+		Image[] result = new Image[rowCount * columnCount];
+		for(int i = 0; i < rowCount ; i++){
+			File curFile = new File(path);
+			for(int j = 0; j < columnCount ; j++){
+				try {
+					BufferedImage temp = ImageIO.read(curFile).getSubimage(startX + j * xSize, startY + i * ySize , xSize, ySize);
+					GameObject.filterBackgroundTransparency(temp);
+					Image curImage = (SwingFXUtils.toFXImage(temp, null));
+					result[columnCount * i + j] = curImage;
+					
+				} catch (FileNotFoundException e) {
+					GameApplication.alertFileNotFound(path);
+				}catch(IOException e){
+					GameApplication.alertIOException(path);
+				}
+			}
+		}
+		return result;
 	}
 	
 	public Tile[][] getMapObjectList(){

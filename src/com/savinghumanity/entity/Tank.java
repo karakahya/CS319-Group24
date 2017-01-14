@@ -65,7 +65,7 @@ public abstract class Tank extends GameObject implements Animation {
                 if(this instanceof PlayerTank && !((PlayerTank)this).isCanFire() ) return;
                 
 		Bullet bullet = new Bullet(getPosX() , getPosY(), true, direction ,fireRange , damage,this);
-		GameEngine.getAllObjects().add(bullet);
+		GameEngine.getInstance().getAllObjects().add(bullet);
 		GameEngine.getBulletList().add(bullet);
 		currentBullet = bullet;
 	}

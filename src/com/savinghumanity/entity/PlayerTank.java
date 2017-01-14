@@ -13,7 +13,7 @@ public class PlayerTank extends Tank {
 	private boolean canFire;
 	private boolean invincible;
 	private boolean isConfused;
-        private ArrayList<Bonus> tankBonuses;
+	private ArrayList<Bonus> tankBonuses;
 
 	/**
 	 * 
@@ -23,9 +23,9 @@ public class PlayerTank extends Tank {
 	public PlayerTank(float corX, float corY,boolean isalive, float firstSpeed, float firstRange, int firstDamage, int firstHealth, boolean movable, boolean firable, boolean invince , boolean isConfused){
 		super(corX, corY,isalive);
 		speed = firstSpeed;
-                fireRange = firstRange;
-                damage = firstDamage;
-                health = firstHealth;
+		fireRange = firstRange;
+		damage = firstDamage;
+		health = firstHealth;
 		//Initial Speeds
 		speedX = 0.0f;
 		speedY = 0.0f;
@@ -36,38 +36,40 @@ public class PlayerTank extends Tank {
 		this.isConfused = isConfused;
 		//Initialize Right Tank Animation
 		BufferedImage temp;
-		
+
 		temp = FileManager.getEntitySprite().getSubimage(6 * 16, 0 * 16, 16, 16); 
-		temp = GameObject.scale(temp, BufferedImage.TYPE_3BYTE_BGR, 32, 32, 2, 2);
+		temp = GameObject.scale(temp, BufferedImage.TYPE_4BYTE_ABGR, 32, 32, 2, 2);
 		this.rTank[0] = (SwingFXUtils.toFXImage(temp, null));
 
 		temp = FileManager.getEntitySprite().getSubimage(7 * 16, 0 * 16, 16, 16); 
-		temp = GameObject.scale(temp, BufferedImage.TYPE_3BYTE_BGR, 32, 32, 2, 2);
+		temp = GameObject.scale(temp, BufferedImage.TYPE_4BYTE_ABGR, 32, 32, 2, 2);
 		this.rTank[1] = (SwingFXUtils.toFXImage(temp, null));
 		//Initialize Down Tank Animation
 		temp = FileManager.getEntitySprite().getSubimage(4 * 16, 0 * 16, 16, 16); 
-		temp = GameObject.scale(temp, BufferedImage.TYPE_3BYTE_BGR, 32, 32, 2, 2);
+		temp = GameObject.scale(temp, BufferedImage.TYPE_4BYTE_ABGR, 32, 32, 2, 2);
 		this.dTank[0] = (SwingFXUtils.toFXImage(temp, null));
 
 		temp = FileManager.getEntitySprite().getSubimage(5 * 16, 0 * 16, 16, 16); 
-		temp = GameObject.scale(temp, BufferedImage.TYPE_3BYTE_BGR, 32, 32, 2, 2);
+		temp = GameObject.scale(temp, BufferedImage.TYPE_4BYTE_ABGR, 32, 32, 2, 2);
 		this.dTank[1] = (SwingFXUtils.toFXImage(temp, null));
 		//Initialize Left Tank Animation
 		temp = FileManager.getEntitySprite().getSubimage(2 * 16, 0 * 16, 16, 16); 
-		temp = GameObject.scale(temp, BufferedImage.TYPE_3BYTE_BGR, 32, 32, 2, 2);
+		temp = GameObject.scale(temp, BufferedImage.TYPE_4BYTE_ABGR, 32, 32, 2, 2);
 		this.lTank[0] = (SwingFXUtils.toFXImage(temp, null));
 
 		temp = FileManager.getEntitySprite().getSubimage(3 * 16, 0 * 16, 16, 16); 
-		temp = GameObject.scale(temp, BufferedImage.TYPE_3BYTE_BGR, 32, 32, 2, 2);
+		temp = GameObject.scale(temp, BufferedImage.TYPE_4BYTE_ABGR, 32, 32, 2, 2);
 		this.lTank[1] = (SwingFXUtils.toFXImage(temp, null));
 		//Initialize Up Tank Animation
 		temp = FileManager.getEntitySprite().getSubimage(0 * 16, 0 * 16, 16, 16); 
-		temp = GameObject.scale(temp, BufferedImage.TYPE_3BYTE_BGR, 32, 32, 2, 2);
+		temp = GameObject.scale(temp, BufferedImage.TYPE_4BYTE_ABGR, 32, 32, 2, 2);
 		this.uTank[0] = (SwingFXUtils.toFXImage(temp, null));
 
 		temp = FileManager.getEntitySprite().getSubimage(1 * 16, 0 * 16, 16, 16); 
-		temp = GameObject.scale(temp, BufferedImage.TYPE_3BYTE_BGR, 32, 32, 2, 2);
+		temp = GameObject.scale(temp, BufferedImage.TYPE_4BYTE_ABGR, 32, 32, 2, 2);
 		this.uTank[1] = (SwingFXUtils.toFXImage(temp, null));
+
+
 
 		//Initially looking upwards
 		this.image = uTank[0];
@@ -76,13 +78,13 @@ public class PlayerTank extends Tank {
 
 	}
 
-    public ArrayList<Bonus> getTankBonuses() {
-        return tankBonuses;
-    }
+	public ArrayList<Bonus> getTankBonuses() {
+		return tankBonuses;
+	}
 
-    public void setTankBonuses(ArrayList<Bonus> tankBonuses) {
-        this.tankBonuses = tankBonuses;
-    }
+	public void setTankBonuses(ArrayList<Bonus> tankBonuses) {
+		this.tankBonuses = tankBonuses;
+	}
 	@Override
 	public void fire(){
 		if(canFire)
@@ -90,40 +92,56 @@ public class PlayerTank extends Tank {
 		return;
 	}
 
-    public boolean isCanFire() {
-        return canFire;
-    }
+	public boolean isCanFire() {
+		return canFire;
+	}
 	public void addBonus(Bonus bonus){
-            tankBonuses.add(bonus);
-        }
+		tankBonuses.add(bonus);
+	}
 	public void neutralize(){
 		canFire = true;
-                canMove = true;
-                damage = 10;
-                fireRange = 300.0f;
-                invincible = false;
-                isConfused = false;
-                
+		canMove = true;
+		damage = 10;
+		fireRange = 300.0f;
+		invincible = false;
+		isConfused = false;
+
+	}
+	public void deeffect(Bonus b){
+		if(b instanceof Broken )
+			canFire = true;
+		else if(b instanceof Confuse)
+			isConfused = false;
+		else if(b instanceof Immortality)
+			invincible = false;
+		else if(b instanceof Rooted)
+			canMove = true;
+		else if(b instanceof Increase && ((Increase) b).getType() == IncreaseBonusType.INCREASE_DAMAGE)
+			damage = 10;
+		else if(b instanceof Increase && ((Increase) b).getType() == IncreaseBonusType.INCREASE_FIRE_RANGE)
+			fireRange = 300.0f;
+		else if(b instanceof Increase && ((Increase) b).getType() == IncreaseBonusType.INCREASE_SPEED)
+			speed = 1.0f;
 	}
 	public void setcanMove(boolean effect){
 		canMove = effect;
 	}
 
-    public boolean canMove() {
-        return canMove;
-    }
+	public boolean canMove() {
+		return canMove;
+	}
 
-    public boolean canFire() {
-        return canFire;
-    }
+	public boolean canFire() {
+		return canFire;
+	}
 
-    public boolean isInvincible() {
-        return invincible;
-    }
+	public boolean isInvincible() {
+		return invincible;
+	}
 
-    public boolean isConfused() {
-        return isConfused;
-    }
+	public boolean isConfused() {
+		return isConfused;
+	}
 
 	public void setcanFire(boolean effect){
 		canFire = effect;
@@ -134,7 +152,7 @@ public class PlayerTank extends Tank {
 	}
 
 
-	
+
 
 
 	public void setConfused(boolean isConfused) {

@@ -28,10 +28,9 @@ public class Increase extends Bonus {
 			break;
 		}
 	}
-
-	public void update() {
-		// TODO Auto-generated method stub
-		
+	public IncreaseBonusType getType(){
+		return type;
 	}
+	
 
 }

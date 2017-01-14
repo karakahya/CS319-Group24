@@ -1,5 +1,6 @@
 package com.savinghumanity.entity;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
@@ -40,13 +41,13 @@ public abstract class GameObject {
 	public boolean collisionCheck(GameObject obj) {
                 Rectangle rectOne = null;
                 Rectangle rectTwo = null;
-                if(obj instanceof Bullet ){
+                if(this instanceof Bullet ){
                     rectOne = new Rectangle((int)(posX + speedX) , (int)(posY + speedY), 14, 14);
                 }
                 else{
                     rectOne = new Rectangle((int)(posX + speedX) , (int)(posY + speedY), 30, 30);
                 }
-                if(this instanceof Bullet){
+                if(obj instanceof Bullet){
                     rectTwo = new Rectangle((int)(obj.getPosX() + obj.getSpeedX()) , (int)(obj.getPosY() + obj.getSpeedY()), 14, 14);
                 }
                 else{
@@ -72,13 +73,47 @@ public abstract class GameObject {
 	 */
 	public static BufferedImage scale(BufferedImage sbi, int imageType, int dWidth, int dHeight, double fWidth, double fHeight) {
 		BufferedImage dbi = null;
+		Color bGroundColor = new Color(0.0f,0.0f,1.0f);
 		if(sbi != null) {
 			dbi = new BufferedImage(dWidth, dHeight,imageType);
 			Graphics2D g = dbi.createGraphics();
 			AffineTransform at = AffineTransform.getScaleInstance(fWidth, fHeight);
 			g.drawRenderedImage(sbi, at);
+			g.setBackground(bGroundColor);
 		}
+		filterBackgroundTransparency(dbi);
 		return dbi;
+	}
+	/**
+	 * Basically convert non-alpha image with background to transparent image by filtering black pixels. Only works with black backgrounds!
+	 * @param oldImage
+	 */
+	public static void filterBackgroundTransparency(BufferedImage oldImage){
+		for(int i = 0 ; i < oldImage.getWidth() ; i++){
+			for(int j = 0 ; j < oldImage.getHeight() ; j++){
+				
+				if(oldImage.getRGB(i, j) == -16777215){ // Black pixel with 0 transparency
+					
+					oldImage.setRGB(i, j, 0x00000000); // Full transparent
+				}
+					
+			}
+		}
+		
+	}
+	/**
+	 * Takes a bufferedImage and filters the background by taking the upperleft pixel as sample and filter each pixel with same values.
+	 * @param oldImage
+	 */
+	public static void filterImageGeneral(BufferedImage oldImage){
+		int samplePixel = oldImage.getRGB(0, 0);
+		for(int i = 0 ; i < oldImage.getWidth() ; i++){
+			for(int j = 0 ; j < oldImage.getHeight() ; j++){
+				if(oldImage.getRGB(i,j) == samplePixel)
+					oldImage.setRGB(i, j, 0x00000000); // Full transparent
+			}
+			
+		}
 	}
 
 	public Image getImage(){

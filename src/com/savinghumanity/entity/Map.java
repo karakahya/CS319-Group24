@@ -1,4 +1,7 @@
 package com.savinghumanity.entity;
+
+import com.savinghumanity.gamelogic.GameEngine;
+
 public class Map {
 	private int mapWidth;
 	private int mapHeight;
@@ -36,6 +39,24 @@ public class Map {
 	}
 	public void setMapHeight(int mapHeight) {
 		this.mapHeight = mapHeight;
+	}
+	
+	public void createRandomMap(int playerTankCount, int enemyTankCount){
+		//Put concrete borders first
+		for(int i = 0 ; i < mapWidth; i ++){
+			for(int j = 0 ; j < mapHeight ; j++){
+				if(i == 0 || i == mapWidth-1 || j == 0 || j == mapHeight-1){
+					tileMap[i][j] = new ConcreteTile(j * 32, i * 32 , true,i, j);
+				}
+			}
+		}
+		for(int i = 0 ; i < playerTankCount ; i++){
+			GameEngine.getInstance().getPlayerTankList().add(new PlayerTank(((int)(Math.random() * 19 + 1) * 32),((int)(Math.random() * 19 + 1) * 32),true, 1.0f,300.0f,10,100,true,true,false , false));
+		}
+		for(int i = 0 ; i < enemyTankCount ; i++){
+			GameEngine.getInstance().getEnemyTankList().add(new EnemyTank(((int)(Math.random() * 19 + 1) * 32),((int)(Math.random() * 19 + 1) * 32),true,(int)(Math.random() * 2)));
+		}
+		
 	}
 	
 	
